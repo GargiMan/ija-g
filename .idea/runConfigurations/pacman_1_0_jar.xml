@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="pacman-1.0.jar" type="JarApplication">
+    <option name="JAR_PATH" value="$PROJECT_DIR$/target/pacman-1.0.jar" />
+    <option name="WORKING_DIRECTORY" value="G:\.dev\git\xmazur09\src" />
+    <option name="ALTERNATIVE_JRE_PATH" />
+    <method v="2">
+      <option name="RunConfigurationTask" enabled="true" run_configuration_name="pacman [package]" run_configuration_type="MavenRunConfiguration" />
+    </method>
+  </configuration>
+</component>
