@@ -2,12 +2,13 @@ package ija.pacman.game;
 
 import ija.pacman.game.field.Field;
 import ija.pacman.game.object.MazeObject;
-
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Test;
+
 import java.util.List;
 
-public class Test {
+public class Test2 {
 
     private Maze maze;
 
@@ -16,21 +17,18 @@ public class Test {
      */
     @Before
     public void setUp() {
-        MazeConfigure cfg = new MazeConfigure();
-        cfg.startReading(4, 3);
-        cfg.processLine("..G");
-        cfg.processLine(".X.");
-        cfg.processLine(".X.");
-        cfg.processLine(".S.");
-        cfg.stopReading();
-        maze = cfg.createMaze();
+        try {
+            maze = new MazeConfigure().load("mapaValidGhost.txt").createMaze();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
      * ija.pacman.game.Test existence objektu, který reprezentuje ducha.
      * 2 body
      */
-    @org.junit.Test
+    @Test
     public void testGhosts() {
         List<MazeObject> lstGhost = maze.ghosts();
         Assert.assertEquals("Bludiste obsahuje jednoho ducha", 1, lstGhost.size());
@@ -46,7 +44,7 @@ public class Test {
      * ija.pacman.game.Test správného pohybu ducha po bludišti.
      * 2 body
      */
-    @org.junit.Test
+    @Test
     public void testGhostMoving() {
         // Ghost na pozici 1,3
         MazeObject obj = maze.ghosts().get(0);
@@ -60,7 +58,7 @@ public class Test {
      * ija.pacman.game.Test správného chování při setkání ducha s pacmanem (sníží se počet životů pacmana).
      * 3 body
      */
-    @org.junit.Test
+    @Test
     public void testGhostMeetsPacman() {
         // Ghost na pozici 1,3
         MazeObject ghost = maze.ghosts().get(0);
@@ -85,7 +83,7 @@ public class Test {
      * Testování notifikací při přesunu objektu (ducha).
      * 5 bodů
      */
-    @org.junit.Test
+    @Test
     public void testNotificationGhostMoving() {
         MazeTester tester = new MazeTester(maze);
 

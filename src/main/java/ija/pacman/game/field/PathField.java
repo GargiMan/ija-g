@@ -2,10 +2,7 @@ package ija.pacman.game.field;
 
 import ija.pacman.game.Direction;
 import ija.pacman.game.Maze;
-import ija.pacman.game.object.GhostObject;
-import ija.pacman.game.object.KeyObject;
 import ija.pacman.game.object.MazeObject;
-import ija.pacman.game.object.PacmanObject;
 
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
@@ -17,7 +14,6 @@ public class PathField implements Field {
     private final int col;
     private Maze maze;
     private final List<MazeObject> mazeObjects = new ArrayList<>();
-
     private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
     public PathField(int row, int col) {
@@ -25,6 +21,7 @@ public class PathField implements Field {
         this.col = col;
     }
 
+    @Override
     public void setMaze(Maze maze) {
         this.maze = maze;
     }
@@ -36,21 +33,17 @@ public class PathField implements Field {
 
     @Override
     public boolean isEmpty() {
-        return mazeObjects.isEmpty();
-    }
-
-    public boolean hasGhost() {
-        return mazeObjects.stream().anyMatch(mazeObject -> mazeObject instanceof GhostObject);
-    }
-
-    public boolean hasKey() {
-        return mazeObjects.stream().anyMatch(mazeObject -> mazeObject instanceof KeyObject);
+        return mazeObjects.stream().noneMatch(mazeObject -> mazeObject.isPacman() || mazeObject.isGhost() || mazeObject.isKey() || mazeObject.isTarget());
     }
 
     @Override
     public MazeObject get() {
-        return isEmpty() ? null : mazeObjects.stream().filter(mazeObject -> mazeObject instanceof PacmanObject).findFirst()
-                .orElse(mazeObjects.stream().filter(mazeObject -> mazeObject instanceof KeyObject).findFirst().orElse(mazeObjects.get(0)));
+        return isEmpty() ? null :
+                mazeObjects.stream().filter(MazeObject::isPacman).findFirst()
+                .orElse(mazeObjects.stream().filter(MazeObject::isGhost).findFirst()
+                        .orElse(mazeObjects.stream().filter(MazeObject::isKey).findFirst()
+                                .orElse(mazeObjects.stream().filter(MazeObject::isTarget).findFirst()
+                                        .orElse(null))));
     }
 
     @Override
@@ -68,7 +61,9 @@ public class PathField implements Field {
         List<MazeObject> mazeObjectsOld = new ArrayList<>(mazeObjects);
         mazeObjects.add(object);
         propertyChangeSupport.addPropertyChangeListener(this.toString(), object);
-        propertyChangeSupport.firePropertyChange(this.toString(), mazeObjectsOld, mazeObjects);
+        if (object.isPacman() || object.isGhost()) {
+            propertyChangeSupport.firePropertyChange(this.toString(), mazeObjectsOld, mazeObjects);
+        }
     }
 
     @Override
@@ -76,7 +71,9 @@ public class PathField implements Field {
         List<MazeObject> mazeObjectsOld = new ArrayList<>(mazeObjects);
         mazeObjects.remove(object);
         propertyChangeSupport.removePropertyChangeListener(this.toString(), object);
-        propertyChangeSupport.firePropertyChange(this.toString(), mazeObjectsOld, mazeObjects);
+        if (object.isPacman() || object.isGhost()) {
+            propertyChangeSupport.firePropertyChange(this.toString(), mazeObjectsOld, mazeObjects);
+        }
     }
 
     @Override

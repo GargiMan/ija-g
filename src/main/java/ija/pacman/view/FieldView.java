@@ -7,11 +7,10 @@ import ija.pacman.game.object.MazeObject;
 import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FieldView extends JPanel implements PropertyChangeListener, MazeObject {
+public class FieldView extends JPanel implements MazeObject {
     private final Field model;
     private final List<ComponentView> objects;
     private int changedModel = 0;
@@ -71,6 +70,7 @@ public class FieldView extends JPanel implements PropertyChangeListener, MazeObj
         return 0;
     }
 
+    @Override
     public void propertyChange(PropertyChangeEvent evt) {
         ++this.changedModel;
         this.privUpdate();

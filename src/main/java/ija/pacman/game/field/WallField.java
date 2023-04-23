@@ -15,9 +15,7 @@ public class WallField implements Field {
     }
 
     @Override
-    public void setMaze(Maze maze) {
-
-    }
+    public void setMaze(Maze maze) {}
 
     @Override
     public Field nextField(Direction dirs) {
@@ -31,7 +29,7 @@ public class WallField implements Field {
 
     @Override
     public MazeObject get() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -41,18 +39,14 @@ public class WallField implements Field {
 
     @Override
     public boolean contains(MazeObject commonMazeObject) {
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public void addObject(MazeObject object) {
-
-    }
+    public void addObject(MazeObject object) {}
 
     @Override
-    public void removeObject(MazeObject object) {
-
-    }
+    public void removeObject(MazeObject object) {}
 
     @Override
     public boolean equals(Object obj) {

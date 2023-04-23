@@ -34,7 +34,6 @@ public class KeyObject implements MazeObject {
     }
 
     public void collect() {
-        //TODO
         field.removeObject(this);
     }
 

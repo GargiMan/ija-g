@@ -8,29 +8,58 @@ import ija.pacman.game.object.KeyObject;
 import ija.pacman.game.object.PacmanObject;
 import ija.pacman.game.object.TargetObject;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Arrays;
+
 public class MazeConfigure {
 
     public static final int BORDER_SIZE = 1;
     private int current_row = BORDER_SIZE;
-    private boolean valid = true;
-    private boolean reading = false;
     private boolean spawn_set = false;
     private Maze maze;
 
-    public void startReading(int rows, int cols) {
+    public MazeConfigure load(String map_filename) throws IOException {
 
-        if (reading) return;
+        StringBuilder str = new StringBuilder(System.getProperty("user.dir"));
+        str.append(File.separator).append("data");
+        str.append(File.separator).append("maps");
+        str.append(File.separator).append(map_filename);
+        File file = new File( str.toString());
+        FileReader fileReader = new FileReader(file);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-        reading = true;
+        //load map size header
+        String line = bufferedReader.readLine();
+        String[] lineParts = line.split(" ");
+        if (lineParts.length != 2) {
+            throw new IllegalArgumentException("Invalid map header: " + Arrays.toString(lineParts));
+        }
+        maze = new Maze(Integer.parseInt(lineParts[0]), Integer.parseInt(lineParts[1]));
 
-        maze = new Maze(rows, cols);
+        //load map
+        while ((line = bufferedReader.readLine()) != null) {
+            processLine(line);
+        }
+
+        if (!spawn_set) {
+            throw new IllegalArgumentException("Map has not set pacman spawn");
+        } else if (current_row != maze.numRows() - BORDER_SIZE) {
+            throw new IllegalArgumentException("Map has less rows than defined in header");
+        }
+
+        return this;
     }
 
-    public boolean processLine(String line) {
+    private void processLine(String line) {
 
-        if (!valid || !reading) return false;
-
-        if (line.length() != maze.numCols()-2*BORDER_SIZE || current_row == maze.numRows()-BORDER_SIZE) return (valid = false);
+        if (line.length() != maze.numCols() - 2 * BORDER_SIZE) {
+            throw new IllegalArgumentException("Map row is longer/shorter than defined in header: " + line);
+        } else if (current_row == maze.numRows() - BORDER_SIZE) {
+            throw new IllegalArgumentException("Map has more rows than defined in header");
+        }
 
         char[] char_line = line.toCharArray();
 
@@ -41,7 +70,7 @@ public class MazeConfigure {
             switch (char_line[current_col-BORDER_SIZE]) {
                 case 'S' -> {
                     if (spawn_set) {
-                        return (valid = false);
+                        throw new IllegalArgumentException("Not supported more than 1 pacman");
                     } else {
                         spawn_set = true;
                     }
@@ -72,7 +101,7 @@ public class MazeConfigure {
                     current_field = new WallField(current_row, current_col);
                 }
                 default -> {
-                    return (valid = false);
+                    throw new IllegalArgumentException("Invalid map character: " + char_line[current_col-BORDER_SIZE] + " in line " + line);
                 }
             }
 
@@ -80,25 +109,13 @@ public class MazeConfigure {
         }
 
         current_row++;
-
-        return true;
-    }
-
-    public boolean stopReading() {
-
-        valid = valid && reading && spawn_set && current_row == maze.numRows()-BORDER_SIZE;
-
-        reading = false;
-
-        return valid;
     }
 
     public Maze createMaze() {
 
-        valid = valid && !reading && spawn_set && current_row == maze.numRows()-BORDER_SIZE;
-
-        if (!valid)
-            return null;
+        if (maze == null) {
+            throw new RuntimeException("Map was not loaded, call load method before");
+        }
 
         //set borders
         for (int i = 0; i < BORDER_SIZE; i++) {

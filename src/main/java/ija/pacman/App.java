@@ -21,7 +21,8 @@ public class App extends Application {
         stage.setTitle(model.getName());
 
         // Start app
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("hello-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("app-view.fxml"));
+        // needs adjustable size in case of different map sizes
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
         stage.setScene(scene);
         stage.show();

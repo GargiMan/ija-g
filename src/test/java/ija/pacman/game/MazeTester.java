@@ -1,7 +1,4 @@
-package ija.pacman.game;//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
+package ija.pacman.game;
 
 import ija.pacman.game.field.Field;
 import ija.pacman.game.object.MazeObject;
@@ -9,15 +6,12 @@ import ija.pacman.view.FieldView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class MazeTester {
-    private final Maze maze;
     private final List<FieldView> fields;
 
     public MazeTester(Maze maze) {
-        this.maze = maze;
-        this.fields = new ArrayList();
+        this.fields = new ArrayList<>();
         int rows = maze.numRows();
         int cols = maze.numCols();
 
@@ -27,7 +21,6 @@ public class MazeTester {
                 this.fields.add(field);
             }
         }
-
     }
 
     public boolean checkEmptyNotification() {
@@ -36,9 +29,7 @@ public class MazeTester {
 
     public boolean checkNotification(StringBuilder msg, MazeObject obj, Field current, Field previous) {
         boolean res = this.privCheckNotification(msg, obj, current, previous);
-        this.fields.forEach((f) -> {
-            f.clearChanged();
-        });
+        this.fields.forEach(FieldView::clearChanged);
         return res;
     }
 
@@ -93,9 +84,6 @@ public class MazeTester {
     }
 
     private List<FieldView> check() {
-        List<FieldView> changed = (List)this.fields.stream().filter((f) -> {
-            return f.numberUpdates() > 0;
-        }).collect(Collectors.toList());
-        return changed;
+        return this.fields.stream().filter(fieldView -> fieldView.numberUpdates() > 0).toList();
     }
 }
