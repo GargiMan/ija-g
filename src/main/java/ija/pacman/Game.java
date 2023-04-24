@@ -55,7 +55,7 @@ public class Game {
 
     public static void stop(boolean finished) {
         System.out.println("Game finished: "+finished);
-        App.showMenu();
+        if (App.stage != null) App.showMenu();
     }
 
     private void initializeInterface() {

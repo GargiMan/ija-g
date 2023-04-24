@@ -4,7 +4,6 @@ import ija.pacman.game.object.MazeObject;
 import javafx.geometry.Bounds;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 
 public class PacmanView implements NodeView {
     private MazeObject model;
@@ -25,8 +24,8 @@ public class PacmanView implements NodeView {
         double y = (h - diameter) / 2.0;
         g.setFill(Color.YELLOW);
         g.fillOval(x, y, diameter, diameter);
-        g.setFill(Color.BLACK);
-        g.setFont(new Font("Serif", 10));
-        g.fillText(Integer.toString(this.model.getLives()), (x + diameter) / 2, (y + diameter + 10.0) / 2 + 5);
+        //g.setFill(Color.BLACK);
+        //g.setFont(new Font("Serif", 10));
+        //g.fillText(Integer.toString(this.model.getLives()), (x + diameter) / 2, (y + diameter + 10.0) / 2 + 5);
     }
 }

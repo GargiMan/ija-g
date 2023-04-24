@@ -1,22 +1,30 @@
-package ija.pacman.game;
+package ija.pacman;
 
-import ija.pacman.App;
+import ija.pacman.game.Direction;
 import ija.pacman.game.object.MazeObject;
+import javafx.stage.Stage;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 public class TestVisual extends App {
 
     public static final int DELAY = 500;
 
-    public static void main(String... args) {
+    @Override
+    public void start(Stage stage) throws XmlPullParserException, IOException {
+        super.start(stage);
+        String str = System.getProperty("user.dir") + File.separator + "data" + File.separator + "maps" + File.separator + "mapaValidGhost.txt";
+        App.startGame(new File(str));
 
-        String filePath = System.getProperty("user.dir") + File.separator + "data" + File.separator + "maps" + File.separator + "mapaValidGhost.txt";
+        runTest();
+    }
 
-        App.startGame(new File(filePath));
-
+    public void runTest() {
         sleep(DELAY);
 
         MazeObject obj = App.getGame().getMaze().ghosts().get(0);
@@ -34,6 +42,10 @@ public class TestVisual extends App {
         obj.move(Direction.D);
         sleep(DELAY);
         obj.move(Direction.R);
+    }
+
+    public static void main(String... args) {
+        launch();
     }
 
     /**

@@ -18,9 +18,9 @@ import java.io.IOException;
 
 public class App extends Application {
 
-    private static Model model;
+    static Model model;
     private static Game game;
-    static Stage stage;
+    public static Stage stage;
     public static File[] maps;
 
     public static Game getGame() {
@@ -28,16 +28,18 @@ public class App extends Application {
     }
 
     @Override
-    public void start(Stage stage) {
+    public void start(Stage stage) throws IOException, XmlPullParserException {
         App.stage = stage;
+
+        // Create a MavenXpp3Reader object to read the pom.xml file
+        MavenXpp3Reader reader = new MavenXpp3Reader();
+        App.model = reader.read(new FileReader("pom.xml"));
+
+
         showMenu();
     }
 
-    public static void main(String[] args) throws IOException, XmlPullParserException {
-        // Create a MavenXpp3Reader object to read the pom.xml file
-        MavenXpp3Reader reader = new MavenXpp3Reader();
-        model = reader.read(new FileReader("pom.xml"));
-
+    public static void main(String[] args) {
         launch();
     }
     public static void showMenu() {
