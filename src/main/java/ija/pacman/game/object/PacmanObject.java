@@ -1,5 +1,6 @@
 package ija.pacman.game.object;
 
+import ija.pacman.Game;
 import ija.pacman.game.Direction;
 import ija.pacman.game.field.Field;
 
@@ -50,6 +51,9 @@ public class PacmanObject implements MazeObject {
 
     public void hit() {
         lives--;
+        if (lives <= 0) {
+            Game.stop(false);
+        }
     }
 
     public void collect(KeyObject key) {
@@ -70,13 +74,6 @@ public class PacmanObject implements MazeObject {
         //met with ghost
         if (mazeObjects.stream().anyMatch(MazeObject::isGhost)) {
             hit();
-        }
-
-        //collect key on field
-        KeyObject key = (KeyObject) mazeObjects.stream().filter(MazeObject::isKey).findFirst().orElse(null);
-        if (key != null) {
-            collect(key);
-            key.collect();
         }
     }
 }

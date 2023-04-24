@@ -8,6 +8,7 @@ public class WallField implements Field {
 
     private final int row;
     private final int col;
+    private Maze maze;
 
     public WallField(int row, int col) {
         this.row = row;
@@ -15,11 +16,13 @@ public class WallField implements Field {
     }
 
     @Override
-    public void setMaze(Maze maze) {}
+    public void setMaze(Maze maze) {
+        this.maze = maze;
+    }
 
     @Override
-    public Field nextField(Direction dirs) {
-        throw new UnsupportedOperationException();
+    public Field nextField(Direction dir) {
+        return maze.getField(row + dir.deltaRow(), col + dir.deltaCol());
     }
 
     @Override

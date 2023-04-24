@@ -8,6 +8,8 @@ import ija.pacman.game.object.PacmanObject;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.File;
+
 public class Test1 {
 
     /**
@@ -15,7 +17,8 @@ public class Test1 {
      */
     @Test
     public void test01() {
-        Assert.assertThrows("Vytvoreni bludiste se nezdarilo", IllegalArgumentException.class, () -> new MazeConfigure().load("mapaInvalid.txt"));
+        String filePath = System.getProperty("user.dir") + File.separator + "data" + File.separator + "maps" + File.separator + "mapaInvalid.txt";
+        Assert.assertThrows("Vytvoreni bludiste se nezdarilo", IllegalArgumentException.class, () -> new MazeConfigure().load( new File(filePath)));
     }
 
     /**
@@ -144,7 +147,8 @@ public class Test1 {
      */
     private Maze createTestMaze() {
         try {
-            return new MazeConfigure().load("mapaValid.txt").createMaze();
+            String filePath = System.getProperty("user.dir") + File.separator + "data" + File.separator + "maps" + File.separator + "mapaValid.txt";
+            return new MazeConfigure().load(new File(filePath)).createMaze();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

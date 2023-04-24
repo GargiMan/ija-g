@@ -1,25 +1,25 @@
 package ija.pacman.game;
 
+import ija.pacman.App;
 import ija.pacman.game.object.MazeObject;
 
-import java.io.IOException;
+import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class TestVisual {
+public class TestVisual extends App {
 
     public static final int DELAY = 500;
 
-    public static void main(String... args) throws IOException {
+    public static void main(String... args) {
 
-        Maze maze = new MazeConfigure().load("mapaValidGhost.txt").createMaze();
+        String filePath = System.getProperty("user.dir") + File.separator + "data" + File.separator + "maps" + File.separator + "mapaValidGhost.txt";
 
-        MazePresenter presenter = new MazePresenter(maze);
-        presenter.open();
+        App.startGame(new File(filePath));
 
         sleep(DELAY);
 
-        MazeObject obj = maze.ghosts().get(0);
+        MazeObject obj = App.getGame().getMaze().ghosts().get(0);
 
         obj.move(Direction.L);
         sleep(DELAY);
@@ -34,10 +34,6 @@ public class TestVisual {
         obj.move(Direction.D);
         sleep(DELAY);
         obj.move(Direction.R);
-        sleep(DELAY);
-        obj.move(Direction.L);
-        sleep(DELAY);
-        obj.move(Direction.U);
     }
 
     /**

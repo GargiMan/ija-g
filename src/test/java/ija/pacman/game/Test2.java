@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.util.List;
 
 public class Test2 {
@@ -18,7 +19,8 @@ public class Test2 {
     @Before
     public void setUp() {
         try {
-            maze = new MazeConfigure().load("mapaValidGhost.txt").createMaze();
+            String filePath = System.getProperty("user.dir") + File.separator + "data" + File.separator + "maps" + File.separator + "mapaValidGhost.txt";
+            maze = new MazeConfigure().load(new File(filePath)).createMaze();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -1,11 +1,12 @@
 package ija.pacman.view;
 
 import ija.pacman.game.object.MazeObject;
+import javafx.geometry.Bounds;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
-import java.awt.*;
-import java.awt.geom.Ellipse2D;
-
-public class PacmanView implements ComponentView {
+public class PacmanView implements NodeView {
     private MazeObject model;
     private FieldView parent;
 
@@ -14,20 +15,18 @@ public class PacmanView implements ComponentView {
         this.parent = parent;
     }
 
-    public void paintComponent(Graphics g) {
-        Graphics2D g2 = (Graphics2D)g;
-        Rectangle bounds = this.parent.getBounds();
+    public void paintNode(GraphicsContext g) {
+        Bounds bounds = this.parent.getLayoutBounds();
         double w = bounds.getWidth();
         double h = bounds.getHeight();
         Math.max(h, w);
         double diameter = Math.min(h, w) - 10.0;
         double x = (w - diameter) / 2.0;
         double y = (h - diameter) / 2.0;
-        Ellipse2D.Double ellipse = new Ellipse2D.Double(x, y, diameter, diameter);
-        g2.setColor(Color.green);
-        g2.fill(ellipse);
-        g2.setColor(Color.black);
-        g2.setFont(new Font("Serif", 1, 20));
-        g2.drawString("(" + this.model.getLives() + ")", (int)(x + diameter) / 2, (int)(y + diameter + 10.0) / 2 + 5);
+        g.setFill(Color.YELLOW);
+        g.fillOval(x, y, diameter, diameter);
+        g.setFill(Color.BLACK);
+        g.setFont(new Font("Serif", 10));
+        g.fillText(Integer.toString(this.model.getLives()), (x + diameter) / 2, (y + diameter + 10.0) / 2 + 5);
     }
 }

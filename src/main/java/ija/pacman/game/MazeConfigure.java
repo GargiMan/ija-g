@@ -18,17 +18,11 @@ public class MazeConfigure {
 
     public static final int BORDER_SIZE = 1;
     private int current_row = BORDER_SIZE;
-    private boolean spawn_set = false;
     private Maze maze;
 
-    public MazeConfigure load(String map_filename) throws IOException {
+    public MazeConfigure load(File map) throws IOException {
 
-        StringBuilder str = new StringBuilder(System.getProperty("user.dir"));
-        str.append(File.separator).append("data");
-        str.append(File.separator).append("maps");
-        str.append(File.separator).append(map_filename);
-        File file = new File( str.toString());
-        FileReader fileReader = new FileReader(file);
+        FileReader fileReader = new FileReader(map);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
 
         //load map size header
@@ -44,10 +38,12 @@ public class MazeConfigure {
             processLine(line);
         }
 
-        if (!spawn_set) {
-            throw new IllegalArgumentException("Map has not set pacman spawn");
-        } else if (current_row != maze.numRows() - BORDER_SIZE) {
+        if (current_row != maze.numRows() - BORDER_SIZE) {
             throw new IllegalArgumentException("Map has less rows than defined in header");
+        } else if (maze.getPacman() == null) {
+            throw new IllegalArgumentException("Map has not set pacman spawn");
+        } else if (maze.getTarget() == null) {
+            throw new IllegalArgumentException("Map has not set target field");
         }
 
         return this;
@@ -69,14 +65,13 @@ public class MazeConfigure {
 
             switch (char_line[current_col-BORDER_SIZE]) {
                 case 'S' -> {
-                    if (spawn_set) {
+                    if (maze.getPacman() != null) {
                         throw new IllegalArgumentException("Not supported more than 1 pacman");
-                    } else {
-                        spawn_set = true;
                     }
                     current_field = new PathField(current_row, current_col);
                     PacmanObject pacman = new PacmanObject(current_field);
                     current_field.addObject(pacman);
+                    maze.setPacman(pacman);
                 }
                 case 'G' -> {
                     current_field = new PathField(current_row, current_col);
@@ -88,11 +83,16 @@ public class MazeConfigure {
                     current_field = new PathField(current_row, current_col);
                     KeyObject key = new KeyObject(current_field);
                     current_field.addObject(key);
+                    maze.addKey(key);
                 }
                 case 'T' -> {
+                    if (maze.getTarget() != null) {
+                        throw new IllegalArgumentException("Not supported more than 1 target fields");
+                    }
                     current_field = new PathField(current_row, current_col);
-                    TargetObject target = new TargetObject(current_field);
+                    TargetObject target = new TargetObject(current_field, maze.getKeys());
                     current_field.addObject(target);
+                    maze.setTarget(target);
                 }
                 case '.' -> {
                     current_field = new PathField(current_row, current_col);
