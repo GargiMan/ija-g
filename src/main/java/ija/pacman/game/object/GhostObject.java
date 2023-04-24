@@ -35,7 +35,7 @@ public class GhostObject implements MazeObject {
         }
         return false;
     }
-
+    
     @Override
     public boolean isGhost() {
         return true;

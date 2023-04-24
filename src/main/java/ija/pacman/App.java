@@ -59,7 +59,7 @@ public class App extends Application {
         button.setText("Start game");
 
         // needs adjustable size in case of different map sizes
-        Scene scene = new Scene(vBox, 320, 240);
+        Scene scene = new Scene(vBox, 1080, 820);
         vBox.requestFocus();
 
         App.stage.setScene(scene);

@@ -73,4 +73,6 @@ public class Maze {
     public void setTarget(TargetObject target) {
         this.target = target;
     }
+
+
 }

@@ -11,6 +11,6 @@ public class Controller {
     public Label gameName;
 
     public void onStartGameButtonClick(ActionEvent actionEvent) {
-        App.startGame(App.maps[0]);
+        App.startGame(App.maps[2]);
     }
 }

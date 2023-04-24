@@ -63,12 +63,14 @@ public class Game {
         int rows = maze.numRows();
         int cols = maze.numCols();
 
+
         int height = rows * GAME_TILE_SIZE;
         int width = cols * GAME_TILE_SIZE;
+        System.out.println("RESIZED SUCCESFULLY");
 
         GridPane layout = new GridPane();
         //layout.setGridLinesVisible(true);
-        layout.setPrefSize(height, width);
+        layout.setPrefSize(width, height);
 
         // setup controls
         GameController gameController = new GameController();
@@ -94,4 +96,5 @@ public class Game {
         App.stage.setResizable(false);
         App.stage.show();
     }
+
 }
