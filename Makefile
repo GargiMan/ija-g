@@ -14,10 +14,11 @@ all: package run
 
 package:
 # /opt/apache-maven-3.9.1/bin/mvn
-    mvn package
+	mvn package
 
 run: package
-    java -cp target/pacman-1.0.jar ija.pacman.App
+#java -cp target/pacman-1.0.jar ija.pacman.App
+	mvn javafx:run
 
 test:
 #Not implemented yet
