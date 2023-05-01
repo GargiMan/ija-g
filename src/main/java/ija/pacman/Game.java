@@ -35,8 +35,7 @@ public class Game {
 
     public void start() {
 
-        // Initialize the user interface here
-        System.out.println("Initializing user interface...");
+        System.getLogger(this.toString()).log(System.Logger.Level.INFO, "Initializing user interface...");
         latch = new CountDownLatch(1);
 
         initializeInterface();
@@ -50,12 +49,11 @@ public class Game {
             return;
         }
 
-        // The user interface is now initialized
-        System.out.println("User interface initialized");
+        System.getLogger(Game.class.getName()).log(System.Logger.Level.INFO, "User interface initialized");
     }
 
     public static void stop(boolean finished) {
-        System.out.println("Game finished: "+finished);
+        System.getLogger(Game.class.getName()).log(System.Logger.Level.INFO, "Game ("+App.getSelectedMap().getName().replace(".txt", "")+") succefully finished: "+finished);
         if (App.getStage() != null) App.showMenu();
     }
 
