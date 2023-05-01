@@ -6,6 +6,7 @@ import ija.pacman.game.MazeConfigure;
 import ija.pacman.view.FieldView;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.util.concurrent.CountDownLatch;
@@ -55,7 +56,7 @@ public class Game {
 
     public static void stop(boolean finished) {
         System.out.println("Game finished: "+finished);
-        if (App.stage != null) App.showMenu();
+        if (App.getStage() != null) App.showMenu();
     }
 
     private void initializeInterface() {
@@ -89,9 +90,10 @@ public class Game {
         layout.requestFocus();
 
         // Set the scene
-        App.stage.setScene(scene);
-        App.stage.setTitle(App.stage.getTitle()+" - "+map.getName());
-        App.stage.setResizable(false);
-        App.stage.show();
+        Stage stage = App.getStage();
+        stage.setScene(scene);
+        stage.setTitle(stage.getTitle()+" - "+map.getName().replace(".txt", ""));
+        stage.setResizable(false);
+        stage.show();
     }
 }
