@@ -8,17 +8,16 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.apache.maven.model.Model;
-import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 
 public class App extends Application {
 
-    static Model model;
+    static Document pom;
     private static Game game;
     public static Stage stage;
     public static File[] maps;
@@ -28,13 +27,9 @@ public class App extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws IOException, XmlPullParserException {
+    public void start(Stage stage) throws ParserConfigurationException, IOException, SAXException {
         App.stage = stage;
-
-        // Create a MavenXpp3Reader object to read the pom.xml file
-        MavenXpp3Reader reader = new MavenXpp3Reader();
-        App.model = reader.read(new FileReader("pom.xml"));
-
+        App.pom = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new File("pom.xml"));
 
         showMenu();
     }
@@ -44,8 +39,8 @@ public class App extends Application {
     }
     public static void showMenu() {
         // load maps
-        String str = System.getProperty("user.dir") + File.separator + "data" + File.separator + "maps";
-        maps = new File(str).listFiles();
+        String filePath = System.getProperty("user.dir") + File.separator + "data" + File.separator + "maps";
+        maps = new File(filePath).listFiles();
 
         VBox vBox = new VBox();
         vBox.setPadding(new Insets(20.0));
@@ -63,7 +58,7 @@ public class App extends Application {
         vBox.requestFocus();
 
         App.stage.setScene(scene);
-        App.stage.setTitle(model.getName());
+        App.stage.setTitle(pom.getElementsByTagName("name").item(0).getTextContent());
         App.stage.show();
     }
 
