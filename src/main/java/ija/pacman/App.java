@@ -21,12 +21,11 @@ import java.util.Arrays;
 
 public class App extends Application {
 
-    static Document pom;
+    private static Document pom;
     private static Game game;
     private static Stage stage;
-    public static File[] maps;
-
-    private static File map;
+    private static File[] maps;
+    private static File selectedMap;
 
     public static Game getGame() {
         return game;
@@ -36,12 +35,12 @@ public class App extends Application {
         return stage;
     }
 
-    public static void setMap(String mapFilename) {
-        map = Arrays.stream(maps).filter(file -> file.getName().equals(mapFilename+".txt")).findFirst().orElseThrow();
+    public static void setSelectedMap(String mapFilename) {
+        selectedMap = Arrays.stream(maps).filter(file -> file.getName().equals(mapFilename+".txt")).findFirst().orElseThrow();
     }
 
-    public static File getMap() {
-        return map;
+    public static File getSelectedMap() {
+        return selectedMap;
     }
 
     @Override
@@ -76,13 +75,7 @@ public class App extends Application {
         // show list of maps
         ListView<String> listView = new ListView<>();
         vBox.getChildren().add(listView);
-        listView.setId("mapList");
         listView.getItems().addAll(Arrays.stream(maps).map(File::getName).filter(s -> s.contains(".txt")).map(s -> s.replace(".txt","")).toList());
-        if (game != null) {
-            listView.getSelectionModel().select(map.getName()+".txt");
-        } else {
-            listView.getSelectionModel().selectFirst();
-        }
         listView.getSelectionModel().selectedItemProperty().addListener(controller::onMapSelection);
 
         // needs adjustable size in case of different map sizes
@@ -92,6 +85,12 @@ public class App extends Application {
         App.stage.setScene(scene);
         App.stage.setTitle(pom.getElementsByTagName("name").item(0).getTextContent());
         App.stage.show();
+
+        if (game != null) {
+            listView.getSelectionModel().select(selectedMap.getName().replace(".txt", ""));
+        } else {
+            listView.getSelectionModel().selectFirst();
+        }
     }
 
     public static void startGame(File map) {
