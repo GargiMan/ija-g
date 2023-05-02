@@ -83,7 +83,7 @@ public class Game {
             }
         }
 
-        Scene scene = new Scene(layout, height, width);
+        Scene scene = new Scene(layout, width, height);
 
         // focus on game - needed for controls
         layout.requestFocus();
@@ -93,6 +93,7 @@ public class Game {
         stage.setScene(scene);
         stage.setTitle(stage.getTitle()+" - "+map.getName().replace(".txt", ""));
         stage.setResizable(false);
+        stage.centerOnScreen();
         stage.show();
     }
 }
