@@ -3,7 +3,6 @@ package ija.pacman.view;
 import ija.pacman.game.object.MazeObject;
 import javafx.geometry.Bounds;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 
 public class GhostView implements NodeView {
     private final MazeObject model;
@@ -22,7 +21,7 @@ public class GhostView implements NodeView {
         double diameter = Math.min(h, w) - 10.0;
         double x = (w - diameter) / 2.0;
         double y = (h - diameter) / 2.0;
-        g.setFill(Color.RED);
+        g.setFill(this.model.getColor());
         g.fillOval(x, y, diameter, diameter);
     }
 }

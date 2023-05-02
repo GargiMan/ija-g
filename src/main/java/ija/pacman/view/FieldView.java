@@ -7,6 +7,7 @@ import ija.pacman.game.field.WallField;
 import ija.pacman.game.object.MazeObject;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
@@ -37,6 +38,7 @@ public class FieldView extends Pane implements MazeObject {
     private void updateView() {
         if (this.model.canMove()) {
             this.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
+            this.getChildren().set(0, new Canvas(Game.GAME_TILE_SIZE, Game.GAME_TILE_SIZE));
             if (!this.model.isEmpty()) {
                 MazeObject o = this.model.get();
                 if (o.isPacman()) {
@@ -50,9 +52,17 @@ public class FieldView extends Pane implements MazeObject {
                 }
                 GraphicsContext g = ((Canvas) this.getChildren().get(0)).getGraphicsContext2D();
                 this.objects.get(this.objects.size()-1).paintNode(g);
+
+                //object info tooltip
+                Tooltip tooltip = new Tooltip();
+                this.setOnMouseClicked(e -> {
+                    Tooltip.install(this, tooltip);
+                    tooltip.setText(this.model.get().getInfo());
+                    tooltip.show(this, e.getScreenX(), e.getScreenY());
+                });
+                this.setOnMouseExited(e -> tooltip.hide());
             } else {
                 this.objects.clear();
-                this.getChildren().set(0, new Canvas(Game.GAME_TILE_SIZE, Game.GAME_TILE_SIZE));
             }
         } else {
             this.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
@@ -75,6 +85,11 @@ public class FieldView extends Pane implements MazeObject {
         this.changedModel = 0;
     }
 
+    @Override
+    public Color getColor() {
+        return null;
+    }
+
     public Field getField() {
         return this.model;
     }
@@ -87,8 +102,14 @@ public class FieldView extends Pane implements MazeObject {
         return false;
     }
 
+    @Override
     public int getLives() {
         return 0;
+    }
+
+    @Override
+    public String getInfo() {
+        return null;
     }
 
     @Override

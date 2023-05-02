@@ -2,17 +2,25 @@ package ija.pacman.game.object;
 
 import ija.pacman.game.Direction;
 import ija.pacman.game.field.Field;
+import javafx.scene.paint.Color;
 
 import java.beans.PropertyChangeEvent;
 import java.util.List;
 
 public class GhostObject implements MazeObject {
 
-    private int lives = 1;
     private Field field;
 
-    public GhostObject(Field field) {
+    private final Color color;
+
+    public GhostObject(Field field, Color color) {
         this.field = field;
+        this.color = color;
+    }
+
+    @Override
+    public Color getColor() {
+        return color;
     }
 
     @Override
@@ -42,11 +50,6 @@ public class GhostObject implements MazeObject {
     }
 
     @Override
-    public int getLives() {
-        return lives;
-    }
-
-    @Override
     public void propertyChange(PropertyChangeEvent evt) {
         List<MazeObject> mazeObjects = (List<MazeObject>) evt.getNewValue();
 
@@ -55,5 +58,10 @@ public class GhostObject implements MazeObject {
 
         //met with ghost
         mazeObjects.stream().filter(MazeObject::isPacman).forEach(mazeObject -> ((PacmanObject) mazeObject).hit());
+    }
+
+    @Override
+    public String getInfo() {
+        return "Ghost\nColor: " + color + "\n";
     }
 }

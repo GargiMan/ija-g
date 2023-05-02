@@ -23,7 +23,7 @@ public class TargetView implements NodeView {
         double diameter = Math.min(h, w) - 10.0;
         double x = (w - diameter) / 2.0;
         double y = (h - diameter) / 2.0;
-        g.setFill(Color.GREEN);
+        g.setFill(this.model.getColor());
         g.fillOval(x, y, diameter, diameter);
         g.setFill(Color.BLACK);
         g.setFont(new Font("Serif", 10));

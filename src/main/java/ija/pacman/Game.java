@@ -35,7 +35,7 @@ public class Game {
 
     public void start() {
 
-        System.getLogger(this.toString()).log(System.Logger.Level.INFO, "Initializing user interface...");
+        System.getLogger(this.toString()).log(System.Logger.Level.INFO, "Initializing user interface");
         latch = new CountDownLatch(1);
 
         initializeInterface();

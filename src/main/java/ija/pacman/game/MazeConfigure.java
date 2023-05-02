@@ -7,12 +7,14 @@ import ija.pacman.game.object.GhostObject;
 import ija.pacman.game.object.KeyObject;
 import ija.pacman.game.object.PacmanObject;
 import ija.pacman.game.object.TargetObject;
+import javafx.scene.paint.Color;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Random;
 
 public class MazeConfigure {
 
@@ -58,6 +60,7 @@ public class MazeConfigure {
         }
 
         char[] char_line = line.toCharArray();
+        Random random = new Random();
 
         for (int current_col = BORDER_SIZE; current_col < maze.numCols()-BORDER_SIZE; current_col++) {
 
@@ -75,13 +78,13 @@ public class MazeConfigure {
                 }
                 case 'G' -> {
                     current_field = new PathField(current_row, current_col);
-                    GhostObject ghost = new GhostObject(current_field);
+                    GhostObject ghost = new GhostObject(current_field, Color.hsb(random.nextDouble()*hashCode(), 0.7f, 1.0f));
                     current_field.addObject(ghost);
                     maze.addGhost(ghost);
                 }
                 case 'K' -> {
                     current_field = new PathField(current_row, current_col);
-                    KeyObject key = new KeyObject(current_field);
+                    KeyObject key = new KeyObject(current_field, Color.hsb(random.nextDouble()*hashCode(), 0.7f, 1.0f));
                     current_field.addObject(key);
                     maze.addKey(key);
                 }

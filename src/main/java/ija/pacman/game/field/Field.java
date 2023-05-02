@@ -12,8 +12,7 @@ public interface Field {
     MazeObject get();
     boolean canMove();
     boolean contains(MazeObject object);
-
     void addObject(MazeObject object);
-
     void removeObject(MazeObject object);
+    String toString();
 }
