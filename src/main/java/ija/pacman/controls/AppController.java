@@ -5,7 +5,7 @@ import javafx.beans.Observable;
 import javafx.beans.property.ReadOnlyProperty;
 import javafx.event.ActionEvent;
 
-public class Controller {
+public class AppController {
 
     public void onStartGameButtonClick(ActionEvent actionEvent) {
         App.startGame(App.getSelectedMap());

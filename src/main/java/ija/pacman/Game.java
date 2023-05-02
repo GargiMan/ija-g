@@ -53,7 +53,8 @@ public class Game {
     }
 
     public static void stop(boolean finished) {
-        System.getLogger(Game.class.getName()).log(System.Logger.Level.INFO, "Game ("+App.getSelectedMap().getName().replace(".txt", "")+") succefully finished: "+finished);
+        String message = "Game"+(App.getSelectedMap() != null ? " ("+App.getSelectedMap().getName().replace(".txt", "")+")" : "") + " succefully finished: "+finished;
+        System.getLogger(Game.class.getName()).log(System.Logger.Level.INFO, message);
         if (App.getStage() != null) App.showMenu();
     }
 

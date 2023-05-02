@@ -1,5 +1,6 @@
 package ija.pacman.view;
 
+import ija.pacman.App;
 import ija.pacman.Game;
 import ija.pacman.game.Direction;
 import ija.pacman.game.field.Field;
@@ -53,14 +54,16 @@ public class FieldView extends Pane implements MazeObject {
                 GraphicsContext g = ((Canvas) this.getChildren().get(0)).getGraphicsContext2D();
                 this.objects.get(this.objects.size()-1).paintNode(g);
 
-                //object info tooltip
-                Tooltip tooltip = new Tooltip();
-                this.setOnMouseClicked(e -> {
-                    Tooltip.install(this, tooltip);
-                    tooltip.setText(this.model.get().getInfo());
-                    tooltip.show(this, e.getScreenX(), e.getScreenY());
-                });
-                this.setOnMouseExited(e -> tooltip.hide());
+                if (App.getStage() != null) {
+                    //object info tooltip
+                    Tooltip tooltip = new Tooltip();
+                    this.setOnMouseClicked(e -> {
+                        Tooltip.install(this, tooltip);
+                        tooltip.setText(this.model.get().getInfo());
+                        tooltip.show(this, e.getScreenX(), e.getScreenY());
+                    });
+                    this.setOnMouseExited(e -> tooltip.hide());
+                }
             } else {
                 this.objects.clear();
             }

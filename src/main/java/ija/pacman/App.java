@@ -1,6 +1,6 @@
 package ija.pacman;
 
-import ija.pacman.controls.Controller;
+import ija.pacman.controls.AppController;
 import ija.pacman.others.Constant;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -77,7 +77,7 @@ public class App extends Application {
 
         // tab pane and controller
         TabPane tabPane = new TabPane();
-        Controller controller = new Controller();
+        AppController appController = new AppController();
 
         // tab play
         Tab tabPlay = new Tab();
@@ -95,13 +95,13 @@ public class App extends Application {
         // start game button
         Button buttonStart = new Button();
         buttonStart.setText(Constant.UI.BUTTON_START);
-        buttonStart.setOnAction(controller::onStartGameButtonClick);
+        buttonStart.setOnAction(appController::onStartGameButtonClick);
         vBoxPlay.getChildren().add(buttonStart);
 
         // show list of maps
         ListView<String> listViewPlay = new ListView<>();
         listViewPlay.getItems().addAll(Arrays.stream(maps).map(File::getName).filter(s -> s.contains(".txt")).map(s -> s.replace(".txt","")).toList());
-        listViewPlay.getSelectionModel().selectedItemProperty().addListener(controller::onMapSelection);
+        listViewPlay.getSelectionModel().selectedItemProperty().addListener(appController::onMapSelection);
         vBoxPlay.getChildren().add(listViewPlay);
 
         // tab replay
@@ -120,13 +120,16 @@ public class App extends Application {
         // replay game button
         Button buttonReplay = new Button();
         buttonReplay.setText(Constant.UI.BUTTON_REPLAY);
-        buttonReplay.setOnAction(controller::onReplayGameButtonClick);
+        buttonReplay.setOnAction(appController::onReplayGameButtonClick);
         vBoxReplay.getChildren().add(buttonReplay);
 
         // show list of logs
         ListView<String> listViewReplay = new ListView<>();
         listViewReplay.getItems().addAll(Arrays.stream(logs).map(File::getName).filter(s -> s.contains(".log")).map(s -> s.replace(".log","")).toList());
-        listViewReplay.getSelectionModel().selectedItemProperty().addListener(controller::onLogSelection);
+        listViewReplay.getSelectionModel().selectedItemProperty().addListener(appController::onLogSelection);
+        if (listViewReplay.getItems().isEmpty()) {
+            tabReplay.setDisable(true);
+        }
         vBoxReplay.getChildren().add(listViewReplay);
 
         // needs adjustable size in case of different map sizes
