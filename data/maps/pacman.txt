@@ -1,0 +1,10 @@
+9 30
+.........XX........XX.........
+.XXX.XXX....XXXXXX....XXX.XXX.
+..XX.X...XX........XX...X.XX..
+X.X....XXXX.XX..XX.XXXX....X.X
+S...XX......XGGGGX......XX...T
+X.X....XXXX.XXXXXX.XXXX....X.X
+..XX.X...XX........XX...X.XX..
+.XXX.XXX....XXXXXX....XXX.XXX.
+.........XX........XX.........

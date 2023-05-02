@@ -19,7 +19,7 @@ public class Test2 {
     @Before
     public void setUp() {
         try {
-            String filePath = System.getProperty("user.dir") + File.separator + "data" + File.separator + "maps" + File.separator + "mapaValidGhost.txt";
+            String filePath = System.getProperty("user.dir") + File.separator + "data" + File.separator + "maps" + File.separator + "validGhost.txt";
             maze = new MazeConfigure().load(new File(filePath)).createMaze();
         } catch (Exception e) {
             throw new RuntimeException(e);

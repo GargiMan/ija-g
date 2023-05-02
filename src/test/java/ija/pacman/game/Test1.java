@@ -17,7 +17,7 @@ public class Test1 {
      */
     @Test
     public void test01() {
-        String filePath = System.getProperty("user.dir") + File.separator + "data" + File.separator + "maps" + File.separator + "mapaInvalid.txt";
+        String filePath = System.getProperty("user.dir") + File.separator + "data" + File.separator + "maps" + File.separator + "invalid.txt";
         Assert.assertThrows("Vytvoreni bludiste se nezdarilo", IllegalArgumentException.class, () -> new MazeConfigure().load( new File(filePath)));
     }
 
@@ -147,7 +147,7 @@ public class Test1 {
      */
     private Maze createTestMaze() {
         try {
-            String filePath = System.getProperty("user.dir") + File.separator + "data" + File.separator + "maps" + File.separator + "mapaValid.txt";
+            String filePath = System.getProperty("user.dir") + File.separator + "data" + File.separator + "maps" + File.separator + "valid.txt";
             return new MazeConfigure().load(new File(filePath)).createMaze();
         } catch (Exception e) {
             throw new RuntimeException(e);
