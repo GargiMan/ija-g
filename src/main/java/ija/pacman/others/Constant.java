@@ -3,7 +3,12 @@ package ija.pacman.others;
 public class Constant {
 
     public static class UI {
+
+        public static final String TAB_PLAY = "Play";
+        public static final String TAB_REPLAY = "Replay";
+
         public static final String BUTTON_START = "Start game";
+        public static final String BUTTON_REPLAY = "Replay game";
 
         public static final String BUTTON_FIRST = "\u23EE";
         public static final String BUTTON_PREVIOUS = "\u2404";
@@ -12,8 +17,6 @@ public class Constant {
 
         public static final String BUTTON_PLAY = "\u23F5";
         public static final String BUTTON_PAUSE = "\u23F8";
-
-
     }
 
 }

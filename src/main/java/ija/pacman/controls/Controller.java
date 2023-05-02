@@ -16,4 +16,13 @@ public class Controller {
             App.setSelectedMap((String) ((ReadOnlyProperty<?>) observable).getValue());
         }
     }
+
+    public void onReplayGameButtonClick(ActionEvent actionEvent) {
+    }
+
+    public void onLogSelection(Observable observable) {
+        if (observable instanceof ReadOnlyProperty<?>) {
+
+        }
+    }
 }

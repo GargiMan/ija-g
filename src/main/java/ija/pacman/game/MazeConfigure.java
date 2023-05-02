@@ -21,6 +21,7 @@ public class MazeConfigure {
     public static final int BORDER_SIZE = 1;
     private int current_row = BORDER_SIZE;
     private Maze maze;
+    private final Random random = new Random();
 
     public MazeConfigure load(File map) throws IOException {
 
@@ -60,7 +61,6 @@ public class MazeConfigure {
         }
 
         char[] char_line = line.toCharArray();
-        Random random = new Random();
 
         for (int current_col = BORDER_SIZE; current_col < maze.numCols()-BORDER_SIZE; current_col++) {
 

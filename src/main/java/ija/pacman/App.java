@@ -8,6 +8,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.w3c.dom.Document;
@@ -27,6 +29,10 @@ public class App extends Application {
     private static File[] maps;
     private static File selectedMap;
 
+    private static File[] logs;
+
+    private static File selectedLog;
+
     public static Game getGame() {
         return game;
     }
@@ -43,6 +49,14 @@ public class App extends Application {
         return selectedMap;
     }
 
+    public static void setSelectedLog(String logFilename) {
+        selectedLog = Arrays.stream(logs).filter(file -> file.getName().equals(logFilename+".log")).findFirst().orElseThrow();
+    }
+
+    public static File getSelectedLog() {
+        return selectedLog;
+    }
+
     @Override
     public void start(Stage stage) throws ParserConfigurationException, IOException, SAXException {
         App.stage = stage;
@@ -56,40 +70,79 @@ public class App extends Application {
     }
 
     public static void showMenu() {
-        // load maps
-        String filePath = System.getProperty("user.dir") + File.separator + "data" + File.separator + "maps";
-        maps = new File(filePath).listFiles();
+        // load files
+        String filePath = System.getProperty("user.dir") + File.separator + "data";
+        maps = new File(filePath + File.separator + "maps").listFiles();
+        logs = new File(filePath + File.separator + "logs").listFiles();
 
-        VBox vBox = new VBox();
-        vBox.setPadding(new Insets(20.0));
-        vBox.setSpacing(20.0);
-        vBox.setAlignment(Pos.CENTER);
+        // tab pane and controller
+        TabPane tabPane = new TabPane();
+        Controller controller = new Controller();
+
+        // tab play
+        Tab tabPlay = new Tab();
+        tabPlay.setText(Constant.UI.TAB_PLAY);
+        tabPlay.closableProperty().setValue(false);
+        tabPane.getTabs().add(tabPlay);
+
+        // tab play content
+        VBox vBoxPlay = new VBox();
+        vBoxPlay.setPadding(new Insets(20.0));
+        vBoxPlay.setSpacing(20.0);
+        vBoxPlay.setAlignment(Pos.CENTER);
+        tabPlay.setContent(vBoxPlay);
 
         // start game button
-        Button button = new Button();
-        vBox.getChildren().add(button);
-        Controller controller = new Controller();
-        button.setOnAction(controller::onStartGameButtonClick);
-        button.setText(Constant.UI.BUTTON_START);
+        Button buttonStart = new Button();
+        buttonStart.setText(Constant.UI.BUTTON_START);
+        buttonStart.setOnAction(controller::onStartGameButtonClick);
+        vBoxPlay.getChildren().add(buttonStart);
 
         // show list of maps
-        ListView<String> listView = new ListView<>();
-        vBox.getChildren().add(listView);
-        listView.getItems().addAll(Arrays.stream(maps).map(File::getName).filter(s -> s.contains(".txt")).map(s -> s.replace(".txt","")).toList());
-        listView.getSelectionModel().selectedItemProperty().addListener(controller::onMapSelection);
+        ListView<String> listViewPlay = new ListView<>();
+        listViewPlay.getItems().addAll(Arrays.stream(maps).map(File::getName).filter(s -> s.contains(".txt")).map(s -> s.replace(".txt","")).toList());
+        listViewPlay.getSelectionModel().selectedItemProperty().addListener(controller::onMapSelection);
+        vBoxPlay.getChildren().add(listViewPlay);
+
+        // tab replay
+        Tab tabReplay = new Tab();
+        tabReplay.setText(Constant.UI.TAB_REPLAY);
+        tabReplay.closableProperty().setValue(false);
+        tabPane.getTabs().add(tabReplay);
+
+        // tab replay content
+        VBox vBoxReplay = new VBox();
+        vBoxReplay.setPadding(new Insets(20.0));
+        vBoxReplay.setSpacing(20.0);
+        vBoxReplay.setAlignment(Pos.CENTER);
+        tabReplay.setContent(vBoxReplay);
+
+        // replay game button
+        Button buttonReplay = new Button();
+        buttonReplay.setText(Constant.UI.BUTTON_REPLAY);
+        buttonReplay.setOnAction(controller::onReplayGameButtonClick);
+        vBoxReplay.getChildren().add(buttonReplay);
+
+        // show list of logs
+        ListView<String> listViewReplay = new ListView<>();
+        listViewReplay.getItems().addAll(Arrays.stream(logs).map(File::getName).filter(s -> s.contains(".log")).map(s -> s.replace(".log","")).toList());
+        listViewReplay.getSelectionModel().selectedItemProperty().addListener(controller::onLogSelection);
+        vBoxReplay.getChildren().add(listViewReplay);
 
         // needs adjustable size in case of different map sizes
-        Scene scene = new Scene(vBox, 320, 240);
-        vBox.requestFocus();
+        Scene scene = new Scene(tabPane, 320, 240);
+        tabPane.requestFocus();
 
         App.stage.setScene(scene);
         App.stage.setTitle(pom.getElementsByTagName("name").item(0).getTextContent());
         App.stage.show();
 
         if (game != null) {
-            listView.getSelectionModel().select(selectedMap.getName().replace(".txt", ""));
+            listViewPlay.getSelectionModel().select(selectedMap.getName().replace(".txt", ""));
+            //listViewReplay.getSelectionModel().select(selectedLog.getName().replace(".log", ""));
         } else {
-            listView.getSelectionModel().selectFirst();
+            listViewPlay.getSelectionModel().selectFirst();
+            //listViewReplay.getSelectionModel().selectFirst();
         }
     }
 
