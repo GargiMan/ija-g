@@ -6,6 +6,7 @@ import ija.pacman.game.field.Field;
 import javafx.scene.paint.Color;
 
 import java.beans.PropertyChangeEvent;
+import java.util.HashSet;
 import java.util.List;
 
 public class TargetObject implements MazeObject {
@@ -48,10 +49,8 @@ public class TargetObject implements MazeObject {
         List<MazeObject> mazeObjects = (List<MazeObject>) evt.getNewValue();
 
         PacmanObject pacman = (PacmanObject) mazeObjects.stream().filter(MazeObject::isPacman).findFirst().orElse(null);
-        if (pacman != null) {
-            if (pacman.showKeys().equals(requiredKeys)) {
-                Game.stop(true);
-            }
+        if (pacman != null && new HashSet<>(pacman.showKeys()).containsAll(requiredKeys)) {
+            Game.stop(true);
         }
     }
 
