@@ -6,26 +6,26 @@ import ija.pacman.game.MazeConfigure;
 import ija.pacman.view.FieldView;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.util.concurrent.CountDownLatch;
 
 public class Game {
 
-    public static final int GAME_TILE_SIZE = 50;
-    private CountDownLatch latch;
+    public static int GAME_TILE_SIZE;
     private final File map;
-    private final Maze maze;
+    private Maze maze = null;
 
     public Game(File map) {
         this.map = map;
+        GAME_TILE_SIZE = 50;
 
         // Load maze
         try {
             maze = new MazeConfigure().load(this.map).createMaze();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            System.getLogger(Game.class.getName()).log(System.Logger.Level.ERROR, "Failed to load maze from file: "+map.getAbsolutePath());
         }
     }
 
@@ -34,22 +34,12 @@ public class Game {
     }
 
     public void start() {
-
-        System.getLogger(this.toString()).log(System.Logger.Level.INFO, "Initializing user interface");
-        latch = new CountDownLatch(1);
-
-        initializeInterface();
-        latch.countDown();
-        //Platform.runLater(() -> {});
-
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if (maze == null) {
             return;
         }
 
-        System.getLogger(Game.class.getName()).log(System.Logger.Level.INFO, "User interface initialized");
+        System.getLogger(Game.class.getName()).log(System.Logger.Level.INFO, "Initializing user interface");
+        initializeInterface();
     }
 
     public static void stop(boolean finished) {
@@ -63,11 +53,16 @@ public class Game {
         int rows = maze.numRows();
         int cols = maze.numCols();
 
+
+
+        while (rows * GAME_TILE_SIZE > Screen.getPrimary().getVisualBounds().getHeight() || cols * GAME_TILE_SIZE > Screen.getPrimary().getVisualBounds().getWidth()) {
+            GAME_TILE_SIZE = GAME_TILE_SIZE - 5;
+        }
+
         int height = rows * GAME_TILE_SIZE;
         int width = cols * GAME_TILE_SIZE;
 
         GridPane layout = new GridPane();
-        //layout.setGridLinesVisible(true);
         layout.setPrefSize(height, width);
 
         // setup controls
@@ -95,5 +90,7 @@ public class Game {
         stage.setResizable(false);
         stage.centerOnScreen();
         stage.show();
+
+        System.getLogger(Game.class.getName()).log(System.Logger.Level.INFO, "User interface initialized");
     }
 }

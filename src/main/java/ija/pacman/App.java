@@ -138,6 +138,7 @@ public class App extends Application {
 
         App.stage.setScene(scene);
         App.stage.setTitle(pom.getElementsByTagName("name").item(0).getTextContent());
+        App.stage.centerOnScreen();
         App.stage.show();
 
         if (game != null) {

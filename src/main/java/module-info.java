@@ -5,6 +5,7 @@ module ija.pacman {
     requires java.logging;
 
     exports ija.pacman;
+    exports ija.pacman.game;
     exports ija.pacman.controls;
     opens ija.pacman to javafx.fxml;
     opens ija.pacman.controls to javafx.fxml;
