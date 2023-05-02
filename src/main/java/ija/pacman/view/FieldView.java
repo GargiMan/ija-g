@@ -11,6 +11,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ public class FieldView extends Pane implements MazeObject {
     }
 
     private void updateView() {
+        this.setPrefSize(Game.GAME_TILE_SIZE, Game.GAME_TILE_SIZE);
         if (this.model.canMove()) {
             this.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
             this.getChildren().set(0, new Canvas(Game.GAME_TILE_SIZE, Game.GAME_TILE_SIZE));
@@ -57,19 +59,28 @@ public class FieldView extends Pane implements MazeObject {
                 if (App.getStage() != null) {
                     //object info tooltip
                     Tooltip tooltip = new Tooltip();
-                    this.setOnMouseClicked(e -> {
+                    this.setOnMouseEntered(e -> {
                         Tooltip.install(this, tooltip);
+                        this.setBackground(new Background(new BackgroundFill(Color.color(0.1,0.1,0.1), null, null)));
                         tooltip.setText(this.model.get().getInfo());
                         tooltip.show(this, e.getScreenX(), e.getScreenY());
+                        tooltip.setShowDelay(Duration.ZERO);
                     });
-                    this.setOnMouseExited(e -> tooltip.hide());
+                    this.setOnMouseExited(e -> {
+                        tooltip.hide();
+                        Tooltip.uninstall(this, tooltip);
+                        this.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
+                    });
                 }
             } else {
                 this.objects.clear();
+                this.setOnMouseEntered(e -> this.setBackground(new Background(new BackgroundFill(Color.color(0.1,0.1,0.1), null, null))));
+                this.setOnMouseExited(e -> this.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null))));
             }
         } else {
             this.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
 
+            //wall connection
             double left = this.model.nextField(Direction.L) instanceof WallField ? 0 : Game.GAME_TILE_SIZE/10.0;
             double top = this.model.nextField(Direction.U) instanceof WallField ? 0 : Game.GAME_TILE_SIZE/10.0;
             double right = this.model.nextField(Direction.R) instanceof WallField ? 0 : Game.GAME_TILE_SIZE/10.0;
