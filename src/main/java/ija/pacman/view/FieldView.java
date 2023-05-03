@@ -87,7 +87,7 @@ public class FieldView extends Pane implements MazeObject {
             double bottom = this.model.nextField(Direction.D) instanceof WallField ? 0 : Game.GAME_TILE_SIZE/10.0;
             BorderWidths borderWidths = new BorderWidths(top, right, bottom, left);
 
-            this.setBorder(new Border(new BorderStroke(Color.DARKBLUE, BorderStrokeStyle.SOLID, new CornerRadii(5.0), borderWidths)));
+            this.setBorder(new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, new CornerRadii(5.0), borderWidths)));
         }
     }
 

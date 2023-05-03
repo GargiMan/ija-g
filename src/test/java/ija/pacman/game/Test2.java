@@ -1,6 +1,7 @@
 package ija.pacman.game;
 
 import ija.pacman.game.field.Field;
+import ija.pacman.game.object.GhostObject;
 import ija.pacman.game.object.MazeObject;
 import org.junit.Assert;
 import org.junit.Before;
@@ -32,10 +33,10 @@ public class Test2 {
      */
     @Test
     public void testGhosts() {
-        List<MazeObject> lstGhost = maze.ghosts();
+        List<GhostObject> lstGhost = maze.getGhosts();
         Assert.assertEquals("Bludiste obsahuje jednoho ducha", 1, lstGhost.size());
         MazeObject obj = lstGhost.remove(0);
-        Assert.assertEquals("Bludiste obsahuje jednoho ducha", 1, maze.ghosts().size());
+        Assert.assertEquals("Bludiste obsahuje jednoho ducha", 1, maze.getGhosts().size());
         Assert.assertFalse("Objekt neni pacman", obj.isPacman());
         Assert.assertEquals("Objekt je na spravne pozici",
                 maze.getField(1, 3),
@@ -49,7 +50,7 @@ public class Test2 {
     @Test
     public void testGhostMoving() {
         // Ghost na pozici 1,3
-        MazeObject obj = maze.ghosts().get(0);
+        MazeObject obj = maze.getGhosts().get(0);
         Assert.assertTrue("Presun na policko se podari.", obj.move(Direction.D));
         Assert.assertTrue("Presun na policko se podari.", obj.move(Direction.D));
         Assert.assertTrue("Presun na policko se podari.", obj.move(Direction.D));
@@ -63,7 +64,7 @@ public class Test2 {
     @Test
     public void testGhostMeetsPacman() {
         // Ghost na pozici 1,3
-        MazeObject ghost = maze.ghosts().get(0);
+        MazeObject ghost = maze.getGhosts().get(0);
 
         // Pacman na pozici 4,2
         Assert.assertFalse("Policko [4,2] neni prazdne", maze.getField(4, 2).isEmpty());
@@ -90,7 +91,7 @@ public class Test2 {
         MazeTester tester = new MazeTester(maze);
 
         // Ghost na pozici 1,3
-        MazeObject obj = maze.ghosts().get(0);
+        MazeObject obj = maze.getGhosts().get(0);
 
         /* Testy, kdy se presun podari.
          * Dve prezentace policka (view) budou notifikovana o zmene (odebrani objektu a vlozeni objektu).

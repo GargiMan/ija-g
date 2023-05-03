@@ -1,5 +1,6 @@
 package ija.pacman.game;
 
+import ija.pacman.App;
 import ija.pacman.game.field.Field;
 import ija.pacman.game.field.PathField;
 import ija.pacman.game.field.WallField;
@@ -25,11 +26,10 @@ public class MazeConfigure {
 
     public MazeConfigure load(File map) throws IOException {
 
-        FileReader fileReader = new FileReader(map);
-        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        BufferedReader br = new BufferedReader(new FileReader(map));
 
         //load map size header
-        String line = bufferedReader.readLine();
+        String line = br.readLine();
         String[] lineParts = line.split(" ");
         if (lineParts.length != 2) {
             throw new IllegalArgumentException("Invalid map header: " + Arrays.toString(lineParts));
@@ -37,8 +37,11 @@ public class MazeConfigure {
         maze = new Maze(Integer.parseInt(lineParts[0]), Integer.parseInt(lineParts[1]));
 
         //load map
-        while ((line = bufferedReader.readLine()) != null) {
+        while ((line = br.readLine()) != null) {
             processLine(line);
+            if (current_row == maze.numRows() - BORDER_SIZE && App.getGame().isReplay()) {
+                break;
+            }
         }
 
         if (current_row != maze.numRows() - BORDER_SIZE) {

@@ -22,6 +22,11 @@ public class PathField implements Field {
     }
 
     @Override
+    public int[] getCoordinates() {
+        return new int[]{row, col};
+    }
+
+    @Override
     public void setMaze(Maze maze) {
         this.maze = maze;
     }
@@ -78,8 +83,8 @@ public class PathField implements Field {
 
     @Override
     public boolean equals(Object object) {
-        if (object instanceof PathField) {
-            return ((PathField) object).row == this.row && ((PathField) object).col == this.col;
+        if (object instanceof PathField pathField) {
+            return pathField.row == this.row && pathField.col == this.col;
         }
         return false;
     }

@@ -18,11 +18,12 @@ public class AppController {
     }
 
     public void onReplayGameButtonClick(ActionEvent actionEvent) {
+        App.replayGame(App.getSelectedLog());
     }
 
     public void onLogSelection(Observable observable) {
         if (observable instanceof ReadOnlyProperty<?>) {
-
+            App.setSelectedLog((String) ((ReadOnlyProperty<?>) observable).getValue());
         }
     }
 }

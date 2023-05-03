@@ -143,15 +143,24 @@ public class App extends Application {
 
         if (game != null) {
             listViewPlay.getSelectionModel().select(selectedMap.getName().replace(".txt", ""));
-            //listViewReplay.getSelectionModel().select(selectedLog.getName().replace(".log", ""));
+            if (selectedLog != null) {
+                listViewReplay.getSelectionModel().select(selectedLog.getName().replace(".log", ""));
+            }
         } else {
             listViewPlay.getSelectionModel().selectFirst();
-            //listViewReplay.getSelectionModel().selectFirst();
+            if (!listViewReplay.getItems().isEmpty()) {
+                listViewReplay.getSelectionModel().selectFirst();
+            }
         }
     }
 
     public static void startGame(File map) {
         game = new Game(map);
         game.start();
+    }
+
+    public static void replayGame(File log) {
+        game = new Game(log);
+        game.replay();
     }
 }

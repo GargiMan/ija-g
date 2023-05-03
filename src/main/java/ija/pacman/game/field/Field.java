@@ -5,7 +5,7 @@ import ija.pacman.game.Maze;
 import ija.pacman.game.object.MazeObject;
 
 public interface Field {
-
+    int[] getCoordinates();
     void setMaze(Maze maze);
     Field nextField(Direction dir);
     boolean isEmpty();
