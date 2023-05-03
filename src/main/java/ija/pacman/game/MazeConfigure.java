@@ -1,6 +1,5 @@
 package ija.pacman.game;
 
-import ija.pacman.App;
 import ija.pacman.game.field.Field;
 import ija.pacman.game.field.PathField;
 import ija.pacman.game.field.WallField;
@@ -38,10 +37,10 @@ public class MazeConfigure {
 
         //load map
         while ((line = br.readLine()) != null) {
-            processLine(line);
-            if (current_row == maze.numRows() - BORDER_SIZE && App.getGame().isReplay()) {
+            if (line.equals("~GAME~")) {
                 break;
             }
+            processLine(line);
         }
 
         if (current_row != maze.numRows() - BORDER_SIZE) {

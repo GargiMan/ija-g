@@ -28,7 +28,7 @@ public class GameController {
         logPositions();
     }
 
-    private void logPositions() {
+    public void logPositions() {
         int[] position = maze.getPacman().getField().getCoordinates();
         logger.log("S"+position[0]+":"+position[1]+"\t");
         for (GhostObject ghost : maze.getGhosts()) {

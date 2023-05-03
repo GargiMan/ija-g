@@ -7,6 +7,8 @@ import ija.pacman.game.MazeConfigure;
 import ija.pacman.view.FieldView;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -18,30 +20,20 @@ import java.time.LocalDateTime;
 public class Game {
 
     public static int GAME_TILE_SIZE;
-    private final File map;
+    private final File file;
     private Maze maze = null;
     private Logger logger;
-    private boolean replay = false;
 
-    public Game(File map) {
-        this.map = map;
+    public Game(File file) {
+        this.file = file;
         GAME_TILE_SIZE = 50;
 
         // Load maze
         try {
-            maze = new MazeConfigure().load(this.map).createMaze();
+            maze = new MazeConfigure().load(this.file).createMaze();
         } catch (Exception e) {
-            System.getLogger(Game.class.getName()).log(System.Logger.Level.ERROR, "Failed to load maze from file: "+map.getAbsolutePath()+"\n"+e.getMessage());
+            System.getLogger(Game.class.getName()).log(System.Logger.Level.ERROR, "Failed to load maze from file: "+ file.getAbsolutePath()+"\n"+e.getMessage());
         }
-    }
-
-    public Game(File map, boolean replay) {
-        this(map);
-        this.replay = replay;
-    }
-
-    public boolean isReplay() {
-        return replay;
     }
 
     public Maze getMaze() {
@@ -57,9 +49,8 @@ public class Game {
             return;
         }
 
-        logger = new Logger(LocalDateTime.now().toString().replaceAll("[.].*", "").replace("T","_").replace(":","-")+".log");
-        try (FileReader fr = new FileReader(map);
-             BufferedReader br = new BufferedReader(fr)) {
+        logger = new Logger(LocalDateTime.now().toString().replaceAll("[.][^.]*$", "").replace("T","_").replace(":","-")+".log");
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             while (br.ready()) {
                 logger.log(br.readLine()+"\n");
             }
@@ -67,9 +58,9 @@ public class Game {
             System.getLogger(Game.class.getName()).log(System.Logger.Level.ERROR, "Failed to log maze\n"+e.getMessage());
             return;
         }
+        logger.log("~GAME~\n");
 
-        System.getLogger(Game.class.getName()).log(System.Logger.Level.INFO, "Initializing user interface");
-        initializeInterface();
+        initializeInterface(false);
     }
 
     public void replay() {
@@ -77,27 +68,27 @@ public class Game {
             return;
         }
 
-        System.getLogger(Game.class.getName()).log(System.Logger.Level.INFO, "Initializing user interface");
-        initializeInterface();
+        logger = new Logger(file);
+        logger.loadMoves();
+
+        initializeInterface(true);
     }
 
     public static void stop(boolean finished) {
-        String message = "Game"+(App.getSelectedMap() != null ? " ("+App.getSelectedMap().getName().replace(".txt", "")+")" : "") + " succefully finished: "+finished;
+        String message = "Game"+(App.getSelectedMap() != null ? " ("+App.getSelectedMap().getName().replaceAll("[.][^.]*$", "")+")" : "") + " succefully finished: "+finished;
         System.getLogger(Game.class.getName()).log(System.Logger.Level.INFO, message);
         if (App.getStage() != null) App.showMenu();
     }
 
-    private void initializeInterface() {
+    private void initializeInterface(boolean replay) {
 
         // Set the scene
         Stage stage = App.getStage();
         stage.setScene(replay ? createReplayScene() : createPlayScene());
-        stage.setTitle(stage.getTitle()+" - "+map.getName().replace(".txt", ""));
+        stage.setTitle(stage.getTitle()+" - "+ file.getName().replaceAll("[.][^.]*$", ""));
         stage.setResizable(false);
         stage.centerOnScreen();
         stage.show();
-
-        System.getLogger(Game.class.getName()).log(System.Logger.Level.INFO, "User interface initialized");
     }
 
     private Scene createPlayScene() {
@@ -106,6 +97,9 @@ public class Game {
         // setup controls
         GameController gameController = new GameController();
         layout.setOnKeyReleased(gameController::keyReleased);
+
+        // log start position
+        gameController.logPositions();
 
         Scene scene = new Scene(layout, layout.getMaxWidth(), layout.getMaxHeight());
 
@@ -116,16 +110,26 @@ public class Game {
     }
 
     private Scene createReplayScene() {
+
+        // create game layout
         GridPane layout = createGrid();
 
-        // setup controls
+        // add layout to vbox
+        VBox vbox = new VBox();
+        vbox.getChildren().add(layout);
+        vbox.setFocusTraversable(true);
+
+        // add replay controls
         ReplayController replayController = new ReplayController();
-        layout.setOnKeyReleased(replayController::keyReleased);
+        HBox hbox = (HBox) replayController.getControls();
+        vbox.getChildren().add(hbox);
+        vbox.setOnKeyReleased(replayController::keyReleased);
 
-        Scene scene = new Scene(layout, layout.getMaxWidth(), layout.getMaxHeight());
+        vbox.setMaxSize(layout.getMaxWidth(), layout.getMaxHeight()+hbox.getHeight());
+        Scene scene = new Scene(vbox, vbox.getMaxWidth(), vbox.getMaxHeight());
 
-        // focus on game - needed for controls
-        layout.requestFocus();
+        // focus on box - needed for controls
+        vbox.requestFocus();
 
         return scene;
     }

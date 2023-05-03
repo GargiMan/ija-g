@@ -12,11 +12,10 @@ import java.util.List;
 public class PacmanObject implements MazeObject {
 
     private int lives = 1;
-
     private final Color color = Color.YELLOW;
-
     private final List<KeyObject> keys = new ArrayList<>();
     private Field field;
+    private int moves = 0;
 
     public PacmanObject(Field field) {
         this.field = field;
@@ -43,6 +42,7 @@ public class PacmanObject implements MazeObject {
             field.removeObject(this);
             field = field.nextField(dir);
             field.addObject(this);
+            moves++;
             return true;
         }
         return false;
@@ -87,6 +87,6 @@ public class PacmanObject implements MazeObject {
 
     @Override
     public String getInfo() {
-        return "Pacman\nLives: " + lives + "\nKeys: " + keys.size() + "\n";
+        return "Pacman\nLives: " + lives + "\nCollected keys: " + keys.size() + "\nMoves: " + moves + "\n";
     }
 }

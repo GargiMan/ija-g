@@ -100,7 +100,7 @@ public class App extends Application {
 
         // show list of maps
         ListView<String> listViewPlay = new ListView<>();
-        listViewPlay.getItems().addAll(Arrays.stream(maps).map(File::getName).filter(s -> s.contains(".txt")).map(s -> s.replace(".txt","")).toList());
+        listViewPlay.getItems().addAll(Arrays.stream(maps).map(File::getName).filter(s -> s.contains(".txt")).map(s -> s.replaceAll("[.][^.]*$","")).toList());
         listViewPlay.getSelectionModel().selectedItemProperty().addListener(appController::onMapSelection);
         vBoxPlay.getChildren().add(listViewPlay);
 
@@ -142,9 +142,9 @@ public class App extends Application {
         App.stage.show();
 
         if (game != null) {
-            listViewPlay.getSelectionModel().select(selectedMap.getName().replace(".txt", ""));
+            listViewPlay.getSelectionModel().select(selectedMap.getName().replaceAll("[.][^.]*$", ""));
             if (selectedLog != null) {
-                listViewReplay.getSelectionModel().select(selectedLog.getName().replace(".log", ""));
+                listViewReplay.getSelectionModel().select(selectedLog.getName().replaceAll("[.][^.]*$", ""));
             }
         } else {
             listViewPlay.getSelectionModel().selectFirst();
