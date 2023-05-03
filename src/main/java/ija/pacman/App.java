@@ -1,6 +1,7 @@
 package ija.pacman;
 
 import ija.pacman.controls.Controller;
+import ija.pacman.controls.GameController;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -22,6 +23,8 @@ public class App extends Application {
     private static Game game;
     public static Stage stage;
     public static File[] maps;
+
+    private static GameController gameController;
 
     public static Game getGame() {
         return game;
@@ -69,6 +72,7 @@ public class App extends Application {
 
     public static void startGame(File map) {
         game = new Game(map);
+        gameController = new GameController();
         game.start();
     }
 }

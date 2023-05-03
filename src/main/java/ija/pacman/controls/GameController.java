@@ -5,6 +5,7 @@ import ija.pacman.game.Direction;
 import ija.pacman.game.object.GhostObject;
 import ija.pacman.game.object.MazeObject;
 import ija.pacman.game.object.PacmanObject;
+import ija.pacman.view.PacmanView;
 import javafx.scene.input.KeyEvent;
 
 import java.util.List;
@@ -42,26 +43,36 @@ public class GameController {
     }
 
     public void keyReleased(KeyEvent e) {
+        Direction direction = null;
+
         switch (e.getCode()) {
             case LEFT:
+                direction = Direction.L;
+                PacmanView.setDirection(Direction.L);
                 pacman.move(Direction.L);
                 for (MazeObject ghost : ghosts) {
                     moveGhost(ghost);
                 }
                 break;
             case UP:
+                direction = Direction.U;
+                PacmanView.setDirection(Direction.U);
                 pacman.move(Direction.U);
                 for (MazeObject ghost : ghosts) {
                     moveGhost(ghost);
                 }
                 break;
             case RIGHT:
+                direction = Direction.R;
+                PacmanView.setDirection(Direction.R);
                 pacman.move(Direction.R);
                 for (MazeObject ghost : ghosts) {
                     moveGhost(ghost);
                 }
                 break;
             case DOWN:
+                direction = Direction.D;
+                PacmanView.setDirection(Direction.D);
                 pacman.move(Direction.D);
                 for (MazeObject ghost : ghosts) {
                     moveGhost(ghost);
