@@ -1,6 +1,6 @@
 package ija.pacman.game.object;
 
-import ija.pacman.Game;
+import ija.pacman.App;
 import ija.pacman.game.Direction;
 import ija.pacman.game.field.Field;
 import javafx.scene.paint.Color;
@@ -33,6 +33,7 @@ public class PacmanObject implements MazeObject {
 
     @Override
     public boolean canMove(Direction dir) {
+        if (dir == Direction.NONE) return false;
         return field.nextField(dir).canMove();
     }
 
@@ -43,6 +44,18 @@ public class PacmanObject implements MazeObject {
             field = field.nextField(dir);
             field.addObject(this);
             moves++;
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean undoMove(Direction dir) {
+        if (canMove(dir)) {
+            field.removeObject(this);
+            field = field.nextField(dir);
+            field.addObject(this);
+            moves--;
             return true;
         }
         return false;
@@ -60,12 +73,18 @@ public class PacmanObject implements MazeObject {
     public void hit() {
         lives--;
         if (lives <= 0) {
-            Game.stop(false);
+            if (!App.getGame().isReplay()) {
+                App.getGame().stop(false);
+            }
         }
     }
 
-    public void collect(KeyObject key) {
+    public void collectKey(KeyObject key) {
         keys.add(key);
+    }
+
+    public KeyObject returnKey() {
+        return keys.remove(keys.size() - 1);
     }
 
     public List<KeyObject> showKeys() {

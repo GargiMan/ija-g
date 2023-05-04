@@ -1,6 +1,6 @@
 package ija.pacman.game.object;
 
-import ija.pacman.Game;
+import ija.pacman.App;
 import ija.pacman.game.Direction;
 import ija.pacman.game.field.Field;
 import javafx.scene.paint.Color;
@@ -40,6 +40,11 @@ public class TargetObject implements MazeObject {
     }
 
     @Override
+    public boolean undoMove(Direction dir) {
+        return false;
+    }
+
+    @Override
     public boolean isTarget() {
         return true;
     }
@@ -50,7 +55,9 @@ public class TargetObject implements MazeObject {
 
         PacmanObject pacman = (PacmanObject) mazeObjects.stream().filter(MazeObject::isPacman).findFirst().orElse(null);
         if (pacman != null && new HashSet<>(pacman.showKeys()).containsAll(requiredKeys)) {
-            Game.stop(true);
+            if (!App.getGame().isReplay()) {
+                App.getGame().stop(true);
+            }
         }
     }
 

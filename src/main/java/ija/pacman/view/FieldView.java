@@ -117,6 +117,11 @@ public class FieldView extends Pane implements MazeObject {
     }
 
     @Override
+    public boolean undoMove(Direction dir) {
+        return false;
+    }
+
+    @Override
     public int getLives() {
         return 0;
     }

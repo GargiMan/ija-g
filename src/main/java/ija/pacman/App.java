@@ -28,9 +28,7 @@ public class App extends Application {
     private static Stage stage;
     private static File[] maps;
     private static File selectedMap;
-
     private static File[] logs;
-
     private static File selectedLog;
 
     public static Game getGame() {
@@ -141,16 +139,18 @@ public class App extends Application {
         App.stage.centerOnScreen();
         App.stage.show();
 
+        // select last played or first map
         if (game != null) {
             listViewPlay.getSelectionModel().select(selectedMap.getName().replaceAll("[.][^.]*$", ""));
-            if (selectedLog != null) {
-                listViewReplay.getSelectionModel().select(selectedLog.getName().replaceAll("[.][^.]*$", ""));
-            }
         } else {
             listViewPlay.getSelectionModel().selectFirst();
-            if (!listViewReplay.getItems().isEmpty()) {
-                listViewReplay.getSelectionModel().selectFirst();
-            }
+        }
+
+        // select last replayed or first log
+        if (selectedLog != null) {
+            listViewReplay.getSelectionModel().select(selectedLog.getName().replaceAll("[.][^.]*$", ""));
+        } else if (!listViewReplay.getItems().isEmpty()) {
+            listViewReplay.getSelectionModel().selectFirst();
         }
     }
 

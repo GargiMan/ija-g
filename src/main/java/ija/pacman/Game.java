@@ -4,6 +4,7 @@ import ija.pacman.controls.GameController;
 import ija.pacman.controls.ReplayController;
 import ija.pacman.game.Maze;
 import ija.pacman.game.MazeConfigure;
+import ija.pacman.log.Logger;
 import ija.pacman.view.FieldView;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
@@ -23,6 +24,7 @@ public class Game {
     private final File file;
     private Maze maze = null;
     private Logger logger;
+    private boolean replay = false;
 
     public Game(File file) {
         this.file = file;
@@ -68,13 +70,19 @@ public class Game {
             return;
         }
 
+        replay = true;
+
         logger = new Logger(file);
-        logger.loadMoves();
+        logger.loadGame();
 
         initializeInterface(true);
     }
 
-    public static void stop(boolean finished) {
+    public boolean isReplay() {
+        return replay;
+    }
+
+    public void stop(boolean finished) {
         String message = "Game"+(App.getSelectedMap() != null ? " ("+App.getSelectedMap().getName().replaceAll("[.][^.]*$", "")+")" : "") + " succefully finished: "+finished;
         System.getLogger(Game.class.getName()).log(System.Logger.Level.INFO, message);
         if (App.getStage() != null) App.showMenu();

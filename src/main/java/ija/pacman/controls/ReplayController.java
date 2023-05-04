@@ -1,7 +1,7 @@
 package ija.pacman.controls;
 
 import ija.pacman.App;
-import ija.pacman.Logger;
+import ija.pacman.log.Logger;
 import ija.pacman.others.Constant;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -36,6 +36,20 @@ public class ReplayController {
         ToggleButton buttonForward = new ToggleButton(Constant.UI.BUTTON_FORWARD);
         Button buttonNext = new Button(Constant.UI.BUTTON_NEXT);
         Button buttonLast = new Button(Constant.UI.BUTTON_LAST);
+
+        // first, previous, next, last
+        buttonFirst.setOnAction(event -> {
+            logger.first();
+        });
+        buttonPrevious.setOnAction(event -> {
+            logger.previous();
+        });
+        buttonNext.setOnAction(event -> {
+            logger.next();
+        });
+        buttonLast.setOnAction(event -> {
+            logger.last();
+        });
 
         // forward and reverse
         ToggleGroup toggleGroup = new ToggleGroup();

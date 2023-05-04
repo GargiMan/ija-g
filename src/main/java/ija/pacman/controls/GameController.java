@@ -1,7 +1,7 @@
 package ija.pacman.controls;
 
 import ija.pacman.App;
-import ija.pacman.Logger;
+import ija.pacman.log.Logger;
 import ija.pacman.game.Direction;
 import ija.pacman.game.Maze;
 import ija.pacman.game.object.GhostObject;
@@ -22,7 +22,7 @@ public class GameController {
             case RIGHT -> maze.getPacman().move(Direction.R);
             case DOWN -> maze.getPacman().move(Direction.D);
             default -> {
-                System.out.println("unknown key");
+                return;
             }
         }
         logPositions();
@@ -30,16 +30,16 @@ public class GameController {
 
     public void logPositions() {
         int[] position = maze.getPacman().getField().getCoordinates();
-        logger.log("S"+position[0]+":"+position[1]+"\t");
+        logger.log("S-"+position[0]+":"+position[1]+"\t");
         for (GhostObject ghost : maze.getGhosts()) {
             position = ghost.getField().getCoordinates();
-            logger.log("G" + position[0] + ":" + position[1] + "\t");
+            logger.log("G-" + position[0] + ":" + position[1] + "\t");
         }
         HashSet<KeyObject> set = new HashSet<>(maze.getKeys());
         maze.getPacman().showKeys().forEach(set::remove);
         for (KeyObject key : set) {
             position = key.getField().getCoordinates();
-            logger.log("K" + position[0] + ":" + position[1] + "\t");
+            logger.log("K-" + position[0] + ":" + position[1] + "\t");
         }
         logger.log("\n");
     }

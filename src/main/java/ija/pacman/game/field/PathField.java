@@ -66,7 +66,7 @@ public class PathField implements Field {
         List<MazeObject> mazeObjectsOld = new ArrayList<>(mazeObjects);
         mazeObjects.add(object);
         propertyChangeSupport.addPropertyChangeListener(this.toString(), object);
-        if (object.isPacman() || object.isGhost()) {
+        if (object.isPacman() || object.isGhost() || object.isKey()) {
             propertyChangeSupport.firePropertyChange(this.toString(), mazeObjectsOld, mazeObjects);
         }
     }
