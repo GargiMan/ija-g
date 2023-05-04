@@ -16,6 +16,11 @@ public class WallField implements Field {
     }
 
     @Override
+    public int[] getCoordinates() {
+        return new int[]{row, col};
+    }
+
+    @Override
     public void setMaze(Maze maze) {
         this.maze = maze;
     }

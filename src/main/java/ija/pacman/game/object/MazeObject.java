@@ -11,6 +11,7 @@ public interface MazeObject extends PropertyChangeListener {
     Field getField();
     boolean canMove(Direction dir);
     boolean move(Direction dir);
+    boolean undoMove(Direction dir);
     default boolean isPacman() {
         return false;
     }

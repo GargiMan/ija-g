@@ -11,7 +11,7 @@ public class Maze {
     private final int numRows;
     private final int numCols;
     private final Field[][] fields;
-    private final List<MazeObject> ghosts = new ArrayList<>();
+    private final List<GhostObject> ghosts = new ArrayList<>();
     private final List<KeyObject> keys = new ArrayList<>();
     private PacmanObject pacman = null;
     private TargetObject target = null;
@@ -42,7 +42,7 @@ public class Maze {
         return numCols;
     }
 
-    public List<MazeObject> ghosts() {
+    public List<GhostObject> getGhosts() {
         return new ArrayList<>(ghosts);
     }
 

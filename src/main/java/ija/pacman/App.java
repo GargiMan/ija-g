@@ -28,9 +28,7 @@ public class App extends Application {
     private static Stage stage;
     private static File[] maps;
     private static File selectedMap;
-
     private static File[] logs;
-
     private static File selectedLog;
 
     public static Game getGame() {
@@ -100,7 +98,7 @@ public class App extends Application {
 
         // show list of maps
         ListView<String> listViewPlay = new ListView<>();
-        listViewPlay.getItems().addAll(Arrays.stream(maps).map(File::getName).filter(s -> s.contains(".txt")).map(s -> s.replace(".txt","")).toList());
+        listViewPlay.getItems().addAll(Arrays.stream(maps).map(File::getName).filter(s -> s.contains(".txt")).map(s -> s.replaceAll("[.][^.]*$","")).toList());
         listViewPlay.getSelectionModel().selectedItemProperty().addListener(appController::onMapSelection);
         vBoxPlay.getChildren().add(listViewPlay);
 
@@ -141,17 +139,28 @@ public class App extends Application {
         App.stage.centerOnScreen();
         App.stage.show();
 
+        // select last played or first map
         if (game != null) {
-            listViewPlay.getSelectionModel().select(selectedMap.getName().replace(".txt", ""));
-            //listViewReplay.getSelectionModel().select(selectedLog.getName().replace(".log", ""));
+            listViewPlay.getSelectionModel().select(selectedMap.getName().replaceAll("[.][^.]*$", ""));
         } else {
             listViewPlay.getSelectionModel().selectFirst();
-            //listViewReplay.getSelectionModel().selectFirst();
+        }
+
+        // select last replayed or first log
+        if (selectedLog != null) {
+            listViewReplay.getSelectionModel().select(selectedLog.getName().replaceAll("[.][^.]*$", ""));
+        } else if (!listViewReplay.getItems().isEmpty()) {
+            listViewReplay.getSelectionModel().selectFirst();
         }
     }
 
     public static void startGame(File map) {
         game = new Game(map);
         game.start();
+    }
+
+    public static void replayGame(File log) {
+        game = new Game(log);
+        game.replay();
     }
 }

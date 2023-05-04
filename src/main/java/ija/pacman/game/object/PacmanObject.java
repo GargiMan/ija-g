@@ -1,6 +1,6 @@
 package ija.pacman.game.object;
 
-import ija.pacman.Game;
+import ija.pacman.App;
 import ija.pacman.game.Direction;
 import ija.pacman.game.field.Field;
 import javafx.scene.paint.Color;
@@ -12,11 +12,10 @@ import java.util.List;
 public class PacmanObject implements MazeObject {
 
     private int lives = 1;
-
     private final Color color = Color.YELLOW;
-
     private final List<KeyObject> keys = new ArrayList<>();
     private Field field;
+    private int moves = 0;
 
     public PacmanObject(Field field) {
         this.field = field;
@@ -34,6 +33,7 @@ public class PacmanObject implements MazeObject {
 
     @Override
     public boolean canMove(Direction dir) {
+        if (dir == Direction.NONE) return false;
         return field.nextField(dir).canMove();
     }
 
@@ -43,6 +43,19 @@ public class PacmanObject implements MazeObject {
             field.removeObject(this);
             field = field.nextField(dir);
             field.addObject(this);
+            moves++;
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean undoMove(Direction dir) {
+        if (canMove(dir)) {
+            field.removeObject(this);
+            field = field.nextField(dir);
+            field.addObject(this);
+            moves--;
             return true;
         }
         return false;
@@ -60,12 +73,18 @@ public class PacmanObject implements MazeObject {
     public void hit() {
         lives--;
         if (lives <= 0) {
-            Game.stop(false);
+            if (!App.getGame().isReplay()) {
+                App.getGame().stop(false);
+            }
         }
     }
 
-    public void collect(KeyObject key) {
+    public void collectKey(KeyObject key) {
         keys.add(key);
+    }
+
+    public KeyObject returnKey() {
+        return keys.remove(keys.size() - 1);
     }
 
     public List<KeyObject> showKeys() {
@@ -87,6 +106,6 @@ public class PacmanObject implements MazeObject {
 
     @Override
     public String getInfo() {
-        return "Pacman\nLives: " + lives + "\nKeys: " + keys.size() + "\n";
+        return "Pacman\nLives: " + lives + "\nCollected keys: " + keys.size() + "\nMoves: " + moves + "\n";
     }
 }

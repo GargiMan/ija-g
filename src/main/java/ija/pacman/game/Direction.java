@@ -1,6 +1,7 @@
 package ija.pacman.game;
 
 public enum Direction {
+    NONE(0, 0),
     L(0, -1),
     U(-1, 0),
     R(0, 1),
@@ -20,5 +21,22 @@ public enum Direction {
 
     public int deltaCol() {
         return this.col;
+    }
+
+    public static Direction fromPositions(int fromRow, int fromCol, int toRow, int toCol) {
+        if (fromCol != toCol) {
+            if (fromCol > toCol) {
+                return L;
+            } else {
+                return R;
+            }
+        } else if (fromRow != toRow) {
+            if (fromRow > toRow) {
+                return U;
+            } else {
+                return D;
+            }
+        }
+        return NONE;
     }
 }
