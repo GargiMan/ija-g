@@ -31,7 +31,7 @@ public class ReplayController {
 
         Button buttonFirst = new Button(Constant.UI.BUTTON_FIRST);
         Button buttonPrevious = new Button(Constant.UI.BUTTON_PREVIOUS);
-        ToggleButton buttonReverse = new ToggleButton(Constant.UI.BUTTON_REVERSE);
+        ToggleButton buttonBackward = new ToggleButton(Constant.UI.BUTTON_BACKWARD);
         Button buttonStop = new Button(Constant.UI.BUTTON_STOP);
         ToggleButton buttonForward = new ToggleButton(Constant.UI.BUTTON_FORWARD);
         Button buttonNext = new Button(Constant.UI.BUTTON_NEXT);
@@ -53,31 +53,33 @@ public class ReplayController {
 
         // forward and reverse
         ToggleGroup toggleGroup = new ToggleGroup();
-        buttonReverse.setToggleGroup(toggleGroup);
+        buttonBackward.setToggleGroup(toggleGroup);
         buttonForward.setToggleGroup(toggleGroup);
-        buttonReverse.setOnAction(event -> {
-            if (buttonReverse.isSelected()) {
+        buttonBackward.setOnAction(event -> {
+            if (buttonBackward.isSelected()) {
                 buttonForward.setText(Constant.UI.BUTTON_FORWARD);
-                buttonReverse.setText(Constant.UI.BUTTON_PAUSE);
+                buttonBackward.setText(Constant.UI.BUTTON_PAUSE);
+                logger.backward();
             } else {
-                buttonReverse.setText(Constant.UI.BUTTON_REVERSE);
+                buttonBackward.setText(Constant.UI.BUTTON_BACKWARD);
+                logger.pause();
             }
-            //logger.reverse();
         });
         buttonForward.setOnAction(event -> {
             if (buttonForward.isSelected()) {
-                buttonReverse.setText(Constant.UI.BUTTON_REVERSE);
+                buttonBackward.setText(Constant.UI.BUTTON_BACKWARD);
                 buttonForward.setText(Constant.UI.BUTTON_PAUSE);
+                logger.forward();
             } else {
                 buttonForward.setText(Constant.UI.BUTTON_FORWARD);
+                logger.pause();
             }
-            //logger.forward();
         });
 
         // stop
         buttonStop.setOnAction(event -> App.showMenu());
 
-        hBox.getChildren().addAll(buttonFirst, buttonPrevious, buttonReverse, buttonStop, buttonForward, buttonNext, buttonLast);
+        hBox.getChildren().addAll(buttonFirst, buttonPrevious, buttonBackward, buttonStop, buttonForward, buttonNext, buttonLast);
 
         return hBox;
     }

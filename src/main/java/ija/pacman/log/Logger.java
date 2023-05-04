@@ -3,18 +3,24 @@ package ija.pacman.log;
 import ija.pacman.App;
 import ija.pacman.game.Direction;
 import ija.pacman.game.object.MazeObject;
+import ija.pacman.others.Constant;
+import javafx.application.Platform;
+import javafx.scene.control.ButtonBase;
+import javafx.scene.layout.Pane;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Timer;
 
 public class Logger {
 
+    private static final double REPLAY_SPEED = 2.0;
     private File file;
-
     private List<Move> currentMoves = null;
     private final List<List<Move>> moves = new ArrayList<>();
+    private Timer timer;
 
     public Logger(String filename) {
         String filePath = System.getProperty("user.dir") + File.separator + "data" + File.separator + "logs" + File.separator;
@@ -124,6 +130,48 @@ public class Logger {
         }
 
         currentMoves = previousMoves;
+    }
+
+    public void backward() {
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new java.util.TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> {
+                    if (moves.indexOf(currentMoves) == 0) {
+                        pause();
+                        ButtonBase button = (ButtonBase)((Pane)App.getStage().getScene().getRoot().getChildrenUnmodifiable().get(1)).getChildrenUnmodifiable()
+                                .stream().filter(n -> n instanceof ButtonBase nbutton && nbutton.getText().equals(Constant.UI.BUTTON_PAUSE)).findFirst().orElseThrow();
+                        button.setText(Constant.UI.BUTTON_BACKWARD);
+                        return;
+                    }
+                    previous();
+                });
+            }
+        }, 0, (long)(1/ REPLAY_SPEED * 1000));
+    }
+
+    public void pause() {
+        timer.cancel();
+    }
+
+    public void forward() {
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new java.util.TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> {
+                    if (moves.indexOf(currentMoves) == moves.size()-1) {
+                        pause();
+                        ButtonBase button = (ButtonBase)((Pane)App.getStage().getScene().getRoot().getChildrenUnmodifiable().get(1)).getChildrenUnmodifiable()
+                                .stream().filter(n -> n instanceof ButtonBase nbutton && nbutton.getText().equals(Constant.UI.BUTTON_PAUSE)).findFirst().orElseThrow();
+                        button.setText(Constant.UI.BUTTON_FORWARD);
+                        return;
+                    }
+                    next();
+                });
+            }
+        }, 0, (long)(1/ REPLAY_SPEED * 1000));
     }
 
     public void next() {
