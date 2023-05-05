@@ -34,7 +34,8 @@ public class FieldView extends Pane implements MazeObject {
     protected void layoutChildren() {
         super.layoutChildren();
         GraphicsContext g = ((Canvas) this.getChildren().get(0)).getGraphicsContext2D();
-        this.objects.forEach(v -> v.paintNode(g));
+        //this.objects.forEach(v -> v.paintNode(g));
+        if (!this.objects.isEmpty()) this.objects.get(this.objects.size() - 1).paintNode(g);
     }
 
     private void updateView() {
@@ -97,11 +98,6 @@ public class FieldView extends Pane implements MazeObject {
 
     public void clearChanged() {
         this.changedModel = 0;
-    }
-
-    @Override
-    public Color getColor() {
-        return null;
     }
 
     public Field getField() {

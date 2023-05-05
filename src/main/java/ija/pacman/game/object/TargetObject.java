@@ -3,7 +3,6 @@ package ija.pacman.game.object;
 import ija.pacman.App;
 import ija.pacman.game.Direction;
 import ija.pacman.game.field.Field;
-import javafx.scene.paint.Color;
 
 import java.beans.PropertyChangeEvent;
 import java.util.HashSet;
@@ -17,11 +16,6 @@ public class TargetObject implements MazeObject {
     public TargetObject(Field field, List<KeyObject> requiredKeys) {
         this.field = field;
         this.requiredKeys = requiredKeys;
-    }
-
-    @Override
-    public Color getColor() {
-        return Color.GREEN;
     }
 
     @Override

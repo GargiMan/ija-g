@@ -2,12 +2,10 @@ package ija.pacman.game.object;
 
 import ija.pacman.game.Direction;
 import ija.pacman.game.field.Field;
-import javafx.scene.paint.Color;
 
 import java.beans.PropertyChangeListener;
 
 public interface MazeObject extends PropertyChangeListener {
-    Color getColor();
     Field getField();
     boolean canMove(Direction dir);
     boolean move(Direction dir);

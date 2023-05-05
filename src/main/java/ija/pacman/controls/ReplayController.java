@@ -9,7 +9,6 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
@@ -18,8 +17,6 @@ import javafx.scene.paint.Color;
 public class ReplayController {
 
     private Logger logger = App.getGame().getLogger();
-    public void keyReleased(KeyEvent keyEvent) {
-    }
 
     public Node getControls() {
         HBox hBox = new HBox();

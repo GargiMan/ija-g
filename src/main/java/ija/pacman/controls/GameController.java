@@ -9,6 +9,7 @@ import ija.pacman.game.object.KeyObject;
 import javafx.scene.input.KeyEvent;
 
 import java.util.HashSet;
+import java.util.Random;
 
 public class GameController {
 
@@ -17,15 +18,38 @@ public class GameController {
 
     public void keyReleased(KeyEvent e) {
         switch (e.getCode()) {
-            case LEFT -> maze.getPacman().move(Direction.L);
-            case UP -> maze.getPacman().move(Direction.U);
-            case RIGHT -> maze.getPacman().move(Direction.R);
-            case DOWN -> maze.getPacman().move(Direction.D);
+            case LEFT -> {
+                if (!maze.getPacman().move(Direction.L)) return;
+            }
+            case UP -> {
+                if (!maze.getPacman().move(Direction.U)) return;
+            }
+            case RIGHT -> {
+                if (!maze.getPacman().move(Direction.R)) return;
+            }
+            case DOWN -> {
+                if (!maze.getPacman().move(Direction.D)) return;
+            }
             default -> {
                 return;
             }
         }
+        maze.getGhosts().forEach(this::moveGhost);
         logPositions();
+    }
+
+    private void moveGhost(GhostObject ghostObject) {
+        if (!ghostObject.canMove(Direction.D) && !ghostObject.canMove(Direction.U) && !ghostObject.canMove(Direction.L) && !ghostObject.canMove(Direction.R)) {
+            return;
+        }
+        Direction direction;
+        boolean canMove;
+        Random random = new Random();
+        do {
+            direction = Direction.values()[random.nextInt(4)+1];
+            canMove = ghostObject.canMove(direction);
+        } while (!canMove);
+        ghostObject.move(direction);
     }
 
     public void logPositions() {

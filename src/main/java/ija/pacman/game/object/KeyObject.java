@@ -2,7 +2,6 @@ package ija.pacman.game.object;
 
 import ija.pacman.game.Direction;
 import ija.pacman.game.field.Field;
-import javafx.scene.paint.Color;
 
 import java.beans.PropertyChangeEvent;
 import java.util.List;
@@ -10,15 +9,8 @@ import java.util.List;
 public class KeyObject implements MazeObject {
     private final Field field;
 
-    private final Color color = Color.BLUE;
-
     public KeyObject(Field field) {
         this.field = field;
-    }
-
-    @Override
-    public Color getColor() {
-        return color;
     }
 
     @Override
@@ -68,6 +60,6 @@ public class KeyObject implements MazeObject {
 
     @Override
     public String getInfo() {
-        return "Key\nColor: " + color + "\n";
+        return "Key\n";
     }
 }

@@ -17,7 +17,7 @@ import java.util.Timer;
 public class Logger {
 
     private static final double REPLAY_SPEED = 2.0;
-    private File file;
+    private final File file;
     private List<Move> currentMoves = null;
     private final List<List<Move>> moves = new ArrayList<>();
     private Timer timer;
@@ -66,8 +66,6 @@ public class Logger {
                 for (String moveS : lineMoveS) {
                     int row = Integer.parseInt(moveS.split("-")[1].split(":")[0]);
                     int col = Integer.parseInt(moveS.split("-")[1].split(":")[1]);
-                    //PathField field = new PathField(row, col);
-                    //field.setMaze(App.getGame().getMaze());
                     MazeObject mazeObject = switch (moveS.split("-")[0]) {
                         case "S" -> App.getGame().getMaze().getPacman();
                         case "G" -> App.getGame().getMaze().getGhosts().get(ghostIndex);

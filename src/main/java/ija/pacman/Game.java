@@ -131,7 +131,6 @@ public class Game {
         ReplayController replayController = new ReplayController();
         HBox hbox = (HBox) replayController.getControls();
         vbox.getChildren().add(hbox);
-        vbox.setOnKeyReleased(replayController::keyReleased);
 
         vbox.setMaxSize(layout.getMaxWidth(), layout.getMaxHeight()+hbox.getHeight());
         Scene scene = new Scene(vbox, vbox.getMaxWidth(), vbox.getMaxHeight());

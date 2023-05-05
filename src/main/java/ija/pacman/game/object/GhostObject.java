@@ -10,16 +10,10 @@ import java.util.List;
 public class GhostObject implements MazeObject {
 
     private Field field;
-    private final Color color = Color.RED;
     private int moves = 0;
 
     public GhostObject(Field field) {
         this.field = field;
-    }
-
-    @Override
-    public Color getColor() {
-        return color;
     }
 
     @Override
@@ -75,6 +69,6 @@ public class GhostObject implements MazeObject {
 
     @Override
     public String getInfo() {
-        return "Ghost\nColor: " + color + "\nMoves: " + moves + "\n";
+        return "Ghost\nMovement: random\nMoves: " + moves + "\n";
     }
 }
