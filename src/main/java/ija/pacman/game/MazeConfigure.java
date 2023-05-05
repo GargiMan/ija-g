@@ -30,7 +30,7 @@ public class MazeConfigure {
         String line = br.readLine();
         String[] lineParts = line.split(" ");
         if (lineParts.length != 2) {
-            throw new RuntimeException("Invalid map header: " + Arrays.toString(lineParts));
+            throw new IllegalArgumentException("Invalid map header: " + Arrays.toString(lineParts));
         }
         maze = new Maze(Integer.parseInt(lineParts[0]), Integer.parseInt(lineParts[1]));
 
@@ -43,11 +43,11 @@ public class MazeConfigure {
         }
 
         if (current_row != maze.numRows() - BORDER_SIZE) {
-            throw new RuntimeException("Map has less rows than defined in header");
+            throw new IllegalArgumentException("Map has less rows than defined in header");
         } else if (maze.getPacman() == null) {
-            throw new RuntimeException("Map has not set pacman spawn");
+            throw new IllegalArgumentException("Map has not set pacman spawn");
         } else if (maze.getTarget() == null) {
-            throw new RuntimeException("Map has not set target field");
+            throw new IllegalArgumentException("Map has not set target field");
         }
 
         return this;
@@ -56,9 +56,9 @@ public class MazeConfigure {
     private void processLine(String line) {
 
         if (line.length() != maze.numCols() - 2 * BORDER_SIZE) {
-            throw new RuntimeException("Map row is longer/shorter than defined in header: " + line);
+            throw new IllegalArgumentException("Map row is longer/shorter than defined in header: " + line);
         } else if (current_row == maze.numRows() - BORDER_SIZE) {
-            throw new RuntimeException("Map has more rows than defined in header");
+            throw new IllegalArgumentException("Map has more rows than defined in header");
         }
 
         char[] char_line = line.toCharArray();
@@ -91,7 +91,7 @@ public class MazeConfigure {
                 }
                 case 'T' -> {
                     if (maze.getTarget() != null) {
-                        throw new RuntimeException("Not supported more than 1 target fields");
+                        throw new IllegalArgumentException("Not supported more than 1 target fields");
                     }
                     current_field = new PathField(current_row, current_col);
                     TargetObject target = new TargetObject(current_field, maze.getKeys());
@@ -105,7 +105,7 @@ public class MazeConfigure {
                     current_field = new WallField(current_row, current_col);
                 }
                 default -> {
-                    throw new RuntimeException("Invalid map character: " + char_line[current_col-BORDER_SIZE] + " in line " + line);
+                    throw new IllegalArgumentException("Invalid map character: " + char_line[current_col-BORDER_SIZE] + " in line " + line);
                 }
             }
 
@@ -118,7 +118,7 @@ public class MazeConfigure {
     public Maze createMaze() {
 
         if (maze == null) {
-            throw new RuntimeException("Map was not loaded, call load method before");
+            throw new IllegalArgumentException("Map was not loaded, call load method before");
         }
 
         //set borders

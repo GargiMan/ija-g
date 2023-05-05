@@ -73,7 +73,7 @@ public class PacmanObject implements MazeObject {
     public void hit() {
         lives--;
         if (lives <= 0) {
-            if (!App.getGame().isReplay()) {
+            if (App.getGame() != null && !App.getGame().isReplay()) {
                 App.getGame().stop(false);
             }
         }
