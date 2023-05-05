@@ -1,5 +1,6 @@
 package ija.pacman.game.object;
 
+import ija.pacman.App;
 import ija.pacman.game.Direction;
 import ija.pacman.game.field.Field;
 
@@ -60,6 +61,6 @@ public class KeyObject implements MazeObject {
 
     @Override
     public String getInfo() {
-        return "Key\n";
+        return "Key "+ (App.getGame().getMaze().getKeys().indexOf(this)+1);
     }
 }

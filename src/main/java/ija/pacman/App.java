@@ -1,6 +1,7 @@
 package ija.pacman;
 
 import ija.pacman.controls.AppController;
+import ija.pacman.game.Game;
 import ija.pacman.others.Constant;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -131,13 +132,13 @@ public class App extends Application {
         vBoxReplay.getChildren().add(listViewReplay);
 
         // needs adjustable size in case of different map sizes
-        Scene scene = new Scene(tabPane, 320, 240);
+        Scene scene = new Scene(tabPane, 320, 320);
         tabPane.requestFocus();
 
-        App.stage.setScene(scene);
         App.stage.setTitle(pom.getElementsByTagName("name").item(0).getTextContent());
-        App.stage.centerOnScreen();
         App.stage.show();
+        App.stage.setScene(scene);
+        App.stage.centerOnScreen();
 
         // select last played or first map
         if (game != null) {

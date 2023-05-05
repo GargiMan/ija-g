@@ -7,6 +7,7 @@ Marek Gergel, xgerge01
 
 ## Compilation and execution
 
-mvn package
+Jar package: mvn package
+Run: mvn javafx:run
 
 java -cp target/pacman-1.0.jar ija.pacman.App

@@ -1,9 +1,8 @@
-package ija.pacman;
+package ija.pacman.game;
 
+import ija.pacman.App;
 import ija.pacman.controls.GameController;
 import ija.pacman.controls.ReplayController;
-import ija.pacman.game.Maze;
-import ija.pacman.game.MazeConfigure;
 import ija.pacman.log.Logger;
 import ija.pacman.view.FieldView;
 import javafx.scene.Scene;
@@ -92,9 +91,9 @@ public class Game {
 
         // Set the scene
         Stage stage = App.getStage();
-        stage.setScene(replay ? createReplayScene() : createPlayScene());
         stage.setTitle(stage.getTitle()+" - "+ file.getName().replaceAll("[.][^.]*$", ""));
-        stage.setResizable(false);
+        stage.setScene(replay ? createReplayScene() : createPlayScene());
+        stage.setResizable(true);
         stage.centerOnScreen();
         stage.show();
     }

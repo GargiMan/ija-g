@@ -1,8 +1,8 @@
 package ija.pacman.game.object;
 
+import ija.pacman.App;
 import ija.pacman.game.Direction;
 import ija.pacman.game.field.Field;
-import javafx.scene.paint.Color;
 
 import java.beans.PropertyChangeEvent;
 import java.util.List;
@@ -69,6 +69,6 @@ public class GhostObject implements MazeObject {
 
     @Override
     public String getInfo() {
-        return "Ghost\nMovement: random\nMoves: " + moves + "\n";
+        return "Ghost " + (App.getGame().getMaze().getGhosts().indexOf(this)+1) + "\nMovement: random\nMoves: " + moves + "\n";
     }
 }

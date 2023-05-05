@@ -1,7 +1,7 @@
 package ija.pacman.view;
 
 import ija.pacman.App;
-import ija.pacman.Game;
+import ija.pacman.game.Game;
 import ija.pacman.game.Direction;
 import ija.pacman.game.field.Field;
 import ija.pacman.game.field.WallField;
@@ -34,12 +34,13 @@ public class FieldView extends Pane implements MazeObject {
     protected void layoutChildren() {
         super.layoutChildren();
         GraphicsContext g = ((Canvas) this.getChildren().get(0)).getGraphicsContext2D();
-        //this.objects.forEach(v -> v.paintNode(g));
         if (!this.objects.isEmpty()) this.objects.get(this.objects.size() - 1).paintNode(g);
     }
 
     private void updateView() {
         this.setPrefSize(Game.GAME_TILE_SIZE, Game.GAME_TILE_SIZE);
+        this.setMaxSize(Game.GAME_TILE_SIZE, Game.GAME_TILE_SIZE);
+        this.setMinSize(Game.GAME_TILE_SIZE, Game.GAME_TILE_SIZE);
         if (this.model.canMove()) {
             this.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
             this.getChildren().set(0, new Canvas(Game.GAME_TILE_SIZE, Game.GAME_TILE_SIZE));
@@ -54,10 +55,11 @@ public class FieldView extends Pane implements MazeObject {
                 } else if (o.isTarget()) {
                     this.objects.add(new TargetView(this, o));
                 }
-                GraphicsContext g = ((Canvas) this.getChildren().get(0)).getGraphicsContext2D();
-                this.objects.get(this.objects.size()-1).paintNode(g);
 
                 if (App.getStage() != null) {
+                    GraphicsContext g = ((Canvas) this.getChildren().get(0)).getGraphicsContext2D();
+                    this.objects.get(this.objects.size()-1).paintNode(g);
+
                     //object info tooltip
                     Tooltip tooltip = new Tooltip();
                     this.setOnMouseEntered(e -> {
@@ -100,14 +102,17 @@ public class FieldView extends Pane implements MazeObject {
         this.changedModel = 0;
     }
 
+    @Override
     public Field getField() {
         return this.model;
     }
 
+    @Override
     public boolean canMove(Direction dir) {
         return false;
     }
 
+    @Override
     public boolean move(Direction dir) {
         return false;
     }
@@ -115,11 +120,6 @@ public class FieldView extends Pane implements MazeObject {
     @Override
     public boolean undoMove(Direction dir) {
         return false;
-    }
-
-    @Override
-    public int getLives() {
-        return 0;
     }
 
     @Override
