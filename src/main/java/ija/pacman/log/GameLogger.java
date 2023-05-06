@@ -1,8 +1,14 @@
+/**
+ * @file GameLogger.java
+ * @brief Class for logging game moves and replaying them later
+ * @author Marek Gergel (xgerge01)
+ */
 package ija.pacman.log;
 
 import ija.pacman.App;
 import ija.pacman.game.Direction;
 import ija.pacman.game.object.MazeObject;
+import ija.pacman.game.object.PacmanObject;
 import ija.pacman.others.Constant;
 import javafx.application.Platform;
 import javafx.scene.control.ButtonBase;
@@ -14,7 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
 
-public class Logger {
+public class GameLogger {
 
     private static final double REPLAY_SPEED = 2.0;
     private final File file;
@@ -22,29 +28,29 @@ public class Logger {
     private final List<List<Move>> moves = new ArrayList<>();
     private Timer timer;
 
-    public Logger(String filename) {
+    public GameLogger(String filename) {
         String filePath = System.getProperty("user.dir") + File.separator + "data" + File.separator + "logs" + File.separator;
         file = new File(filePath+filename);
 
         try {
             if (file.createNewFile()) {
-                System.getLogger(Logger.class.getName()).log(System.Logger.Level.INFO, "Created new log file: "+file.getName());
+                System.getLogger(GameLogger.class.getName()).log(System.Logger.Level.INFO, "Created new log file: "+file.getName());
             }
         } catch (Exception e) {
-            System.getLogger(Logger.class.getName()).log(System.Logger.Level.ERROR, "Failed to create log file: "+filename+"\n"+e.getMessage());
+            System.getLogger(GameLogger.class.getName()).log(System.Logger.Level.ERROR, "Failed to create log file: "+filename+"\n"+e.getMessage());
         }
     }
 
-    public Logger(File log) {
+    public GameLogger(File log) {
         this.file = log;
-        System.getLogger(Logger.class.getName()).log(System.Logger.Level.INFO, "Replaying log file: "+file.getName());
+        System.getLogger(GameLogger.class.getName()).log(System.Logger.Level.INFO, "Replaying log file: "+file.getName());
     }
 
     public void log(String str) {
         try(PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file, true)))) {
             pw.print(str);
         } catch (Exception e) {
-            System.getLogger(Logger.class.getName()).log(System.Logger.Level.ERROR, "Failed to write to log file: "+file.getName()+"\n"+e.getMessage());
+            System.getLogger(GameLogger.class.getName()).log(System.Logger.Level.ERROR, "Failed to write to log file: "+file.getName()+"\n"+e.getMessage());
         }
     }
 
@@ -97,7 +103,7 @@ public class Logger {
             }
             currentMoves = moves.get(0);
         } catch (Exception e) {
-            System.getLogger(Logger.class.getName()).log(System.Logger.Level.ERROR, "Failed to load game log: "+file.getName()+"\n"+e.getMessage());
+            System.getLogger(GameLogger.class.getName()).log(System.Logger.Level.ERROR, "Failed to load game log: "+file.getName()+"\n"+e.getMessage());
         }
     }
 
@@ -119,6 +125,11 @@ public class Logger {
             int[] fromCoords = move.getCoordinates();
             int[] toCoords = move.previous().getCoordinates();
             move.getObject().undoMove(Direction.fromPositions(fromCoords[0], fromCoords[1], toCoords[0], toCoords[1]));
+
+            //heal pacman if he died
+            if (move.getObject() instanceof PacmanObject pacman && pacman.getLives() <= 0) {
+                pacman.heal();
+            }
         }
 
         //return key if it was picked up

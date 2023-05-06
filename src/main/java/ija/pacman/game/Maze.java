@@ -1,3 +1,8 @@
+/**
+ * @file Maze.java
+ * @brief Maze class which represents maze in game (contains fields, ghosts, pacman, target, keys)
+ * @author Marek Gergel (xgerge01)
+ */
 package ija.pacman.game;
 
 import ija.pacman.game.field.Field;

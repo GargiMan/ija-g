@@ -1,3 +1,7 @@
+/**
+ * @file Test1.java
+ * @brief Reused and adjusted test class for Maze from previous projects
+ */
 package ija.pacman.game;
 
 import ija.pacman.game.field.Field;

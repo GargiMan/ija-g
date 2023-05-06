@@ -1,3 +1,7 @@
+/**
+ * @file Test2.java
+ * @brief Reused and adjusted test class for Maze from previous projects
+ */
 package ija.pacman.game;
 
 import ija.pacman.game.field.Field;
@@ -40,7 +44,7 @@ public class Test2 {
         Assert.assertFalse("Objekt neni pacman", obj.isPacman());
         Assert.assertEquals("Objekt je na spravne pozici",
                 maze.getField(1, 3),
-                obj.getField());
+                obj.field());
     }
 
     /**
@@ -121,7 +125,7 @@ public class Test2 {
         boolean res;
 
         // Policko, na kterem byl objekt pred zmenou
-        Field previous = obj.getField();
+        Field previous = obj.field();
         // Policko, na kterem ma byt objekt po zmene
         Field current = previous.nextField(dir);
 

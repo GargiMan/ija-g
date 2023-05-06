@@ -1,3 +1,8 @@
+/**
+ * @file Constant.java
+ * @brief Class for storing constants used in UI and other classes
+ * @author Marek Gergel (xgerge01)
+ */
 package ija.pacman.others;
 
 public class Constant {

@@ -1,3 +1,8 @@
+/**
+ * @file PathField.java
+ * @brief Path field implementation of Field interface
+ * @author Marek Gergel (xgerge01)
+ */
 package ija.pacman.game.field;
 
 import ija.pacman.game.Direction;
@@ -16,6 +21,11 @@ public class PathField implements Field {
     private final List<MazeObject> mazeObjects = new ArrayList<>();
     private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
+    /**
+     * Constructor of PathField
+     * @param row row of field
+     * @param col column of field
+     */
     public PathField(int row, int col) {
         this.row = row;
         this.col = col;

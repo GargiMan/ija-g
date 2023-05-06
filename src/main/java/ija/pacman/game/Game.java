@@ -1,9 +1,14 @@
+/**
+ * @file Game.java
+ * @brief Game class that handles game logic and interface initialization and switching between game and replay mode
+ * @author Marek Gergel (xgerge01)
+ */
 package ija.pacman.game;
 
 import ija.pacman.App;
 import ija.pacman.controls.GameController;
 import ija.pacman.controls.ReplayController;
-import ija.pacman.log.Logger;
+import ija.pacman.log.GameLogger;
 import ija.pacman.view.FieldView;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
@@ -22,8 +27,9 @@ public class Game {
     public static int GAME_TILE_SIZE;
     private final File file;
     private Maze maze = null;
-    private Logger logger;
+    private GameLogger gameLogger;
     private boolean replay = false;
+    private boolean finished = false;
 
     public Game(File file) {
         this.file = file;
@@ -41,8 +47,8 @@ public class Game {
         return maze;
     }
 
-    public Logger getLogger() {
-        return logger;
+    public GameLogger getLogger() {
+        return gameLogger;
     }
 
     public void start() {
@@ -50,16 +56,16 @@ public class Game {
             return;
         }
 
-        logger = new Logger(LocalDateTime.now().toString().replaceAll("[.][^.]*$", "").replace("T","_").replace(":","-")+".log");
+        gameLogger = new GameLogger(LocalDateTime.now().toString().replaceAll("[.][^.]*$", "").replace("T","_").replace(":","-")+".log");
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             while (br.ready()) {
-                logger.log(br.readLine()+"\n");
+                gameLogger.log(br.readLine()+"\n");
             }
         } catch (Exception e) {
             System.getLogger(Game.class.getName()).log(System.Logger.Level.ERROR, "Failed to log maze\n"+e.getMessage());
             return;
         }
-        logger.log("~GAME~\n");
+        gameLogger.log("~GAME~\n");
 
         initializeInterface(false);
     }
@@ -71,8 +77,8 @@ public class Game {
 
         replay = true;
 
-        logger = new Logger(file);
-        logger.loadGame();
+        gameLogger = new GameLogger(file);
+        gameLogger.loadGame();
 
         initializeInterface(true);
     }
@@ -81,7 +87,12 @@ public class Game {
         return replay;
     }
 
+    public boolean isFinished() {
+        return finished;
+    }
+
     public void stop(boolean finished) {
+        this.finished = finished;
         String message = "Game"+(App.getSelectedMap() != null ? " ("+App.getSelectedMap().getName().replaceAll("[.][^.]*$", "")+")" : "") + " succefully finished: "+finished;
         System.getLogger(Game.class.getName()).log(System.Logger.Level.INFO, message);
         if (App.getStage() != null) App.showMenu();
@@ -93,9 +104,9 @@ public class Game {
         Stage stage = App.getStage();
         stage.setTitle(stage.getTitle()+" - "+ file.getName().replaceAll("[.][^.]*$", ""));
         stage.setScene(replay ? createReplayScene() : createPlayScene());
+        stage.show();
         stage.setResizable(true);
         stage.centerOnScreen();
-        stage.show();
     }
 
     private Scene createPlayScene() {
@@ -131,7 +142,7 @@ public class Game {
         HBox hbox = (HBox) replayController.getControls();
         vbox.getChildren().add(hbox);
 
-        vbox.setMaxSize(layout.getMaxWidth(), layout.getMaxHeight()+hbox.getHeight());
+        vbox.setMaxSize(layout.getMaxWidth(), layout.getMaxHeight()+hbox.getPrefHeight());
         Scene scene = new Scene(vbox, vbox.getMaxWidth(), vbox.getMaxHeight());
 
         // focus on box - needed for controls

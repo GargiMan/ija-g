@@ -1,3 +1,8 @@
+/**
+ * @file GhostView.java
+ * @brief Class for painting ghost in UI
+ * @author Marek Gergel (xgerge01)
+ */
 package ija.pacman.view;
 
 import ija.pacman.game.object.MazeObject;
@@ -18,7 +23,7 @@ public class GhostView implements NodeView {
 
     public void paintNode(GraphicsContext g) {
         Bounds bounds = this.parent.getLayoutBounds();
-        File file = new File(System.getProperty("user.dir") + File.separator + "data" + File.separator + "icons" + File.separator + "ghost.png");
+        File file = new File(System.getProperty("user.dir") + File.separator + "lib" + File.separator + "icons" + File.separator + "ghost.png");
         g.drawImage(new Image(file.toURI().toString()), 0, 0, bounds.getWidth(), bounds.getHeight());
     }
 }

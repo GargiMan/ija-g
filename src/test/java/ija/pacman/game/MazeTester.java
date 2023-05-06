@@ -1,3 +1,7 @@
+/**
+ * @file MazeTester.java
+ * @brief Reused and adjusted test class for Maze from previous projects
+ */
 package ija.pacman.game;
 
 import ija.pacman.game.field.Field;
@@ -42,8 +46,8 @@ public class MazeTester {
         } else {
             FieldView fv1 = (FieldView)changed.get(0);
             FieldView fv2 = (FieldView)changed.get(1);
-            Field f1 = fv1.getField();
-            Field f2 = fv2.getField();
+            Field f1 = fv1.field();
+            Field f2 = fv2.field();
             size = fv1.numberUpdates();
             if (size != 1) {
                 msg.append("Chyba - nespravny pocet notifikovani policka ").append(" Ocekava se 1, je ").append(size);

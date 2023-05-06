@@ -1,3 +1,8 @@
+/**
+ * @file GhostObject.java
+ * @brief Ghost object implementation of MazeObject interface
+ * @author Marek Gergel (xgerge01)
+ */
 package ija.pacman.game.object;
 
 import ija.pacman.App;
@@ -7,17 +12,24 @@ import ija.pacman.game.field.Field;
 import java.beans.PropertyChangeEvent;
 import java.util.List;
 
+/**
+ * Ghost object
+ */
 public class GhostObject implements MazeObject {
 
     private Field field;
     private int moves = 0;
 
+    /**
+     * Constructor of GhostObject
+     * @param field field of object
+     */
     public GhostObject(Field field) {
         this.field = field;
     }
 
     @Override
-    public Field getField() {
+    public Field field() {
         return field;
     }
 

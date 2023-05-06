@@ -1,3 +1,8 @@
+/**
+ * @file KeyObject.java
+ * @brief Key object implementation of MazeObject interface
+ * @author Marek Gergel (xgerge01)
+ */
 package ija.pacman.game.object;
 
 import ija.pacman.App;
@@ -7,17 +12,11 @@ import ija.pacman.game.field.Field;
 import java.beans.PropertyChangeEvent;
 import java.util.List;
 
-public class KeyObject implements MazeObject {
-    private final Field field;
-
-    public KeyObject(Field field) {
-        this.field = field;
-    }
-
-    @Override
-    public Field getField() {
-        return field;
-    }
+/**
+ * Key object
+ * @param field of object
+ */
+public record KeyObject(Field field) implements MazeObject {
 
     @Override
     public boolean canMove(Direction dir) {
@@ -39,10 +38,16 @@ public class KeyObject implements MazeObject {
         return true;
     }
 
+    /**
+     * Collect key from field
+     */
     public void collect() {
         field.removeObject(this);
     }
 
+    /**
+     * Place key on field
+     */
     public void place() {
         field.addObject(this);
     }
@@ -61,6 +66,6 @@ public class KeyObject implements MazeObject {
 
     @Override
     public String getInfo() {
-        return "Key "+ (App.getGame().getMaze().getKeys().indexOf(this)+1);
+        return "Key " + (App.getGame().getMaze().getKeys().indexOf(this) + 1);
     }
 }

@@ -1,3 +1,8 @@
+/**
+ * @file Direction.java
+ * @brief Enum for directions in maze (L, U, R, D, NONE)
+ * @author Marek Gergel (xgerge01)
+ */
 package ija.pacman.game;
 
 public enum Direction {

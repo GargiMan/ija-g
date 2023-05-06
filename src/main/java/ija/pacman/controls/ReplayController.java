@@ -1,7 +1,13 @@
+/**
+ * @file ReplayController.java
+ * @brief Controller for the replay scene of the application
+ * @author Marek Gergel (xgerge01)
+ */
 package ija.pacman.controls;
 
 import ija.pacman.App;
-import ija.pacman.log.Logger;
+import ija.pacman.game.Game;
+import ija.pacman.log.GameLogger;
 import ija.pacman.others.Constant;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -16,8 +22,12 @@ import javafx.scene.paint.Color;
 
 public class ReplayController {
 
-    private Logger logger = App.getGame().getLogger();
+    private GameLogger gameLogger = App.getGame().getLogger();
 
+    /**
+     * Returns the controls for replaying the game
+     * @return box with controls
+     */
     public Node getControls() {
         HBox hBox = new HBox();
         hBox.setPadding(new Insets(10.0));
@@ -36,16 +46,16 @@ public class ReplayController {
 
         // first, previous, next, last
         buttonFirst.setOnAction(event -> {
-            logger.first();
+            gameLogger.first();
         });
         buttonPrevious.setOnAction(event -> {
-            logger.previous();
+            gameLogger.previous();
         });
         buttonNext.setOnAction(event -> {
-            logger.next();
+            gameLogger.next();
         });
         buttonLast.setOnAction(event -> {
-            logger.last();
+            gameLogger.last();
         });
 
         // forward and reverse
@@ -56,20 +66,20 @@ public class ReplayController {
             if (buttonBackward.isSelected()) {
                 buttonForward.setText(Constant.UI.BUTTON_FORWARD);
                 buttonBackward.setText(Constant.UI.BUTTON_PAUSE);
-                logger.backward();
+                gameLogger.backward();
             } else {
                 buttonBackward.setText(Constant.UI.BUTTON_BACKWARD);
-                logger.pause();
+                gameLogger.pause();
             }
         });
         buttonForward.setOnAction(event -> {
             if (buttonForward.isSelected()) {
                 buttonBackward.setText(Constant.UI.BUTTON_BACKWARD);
                 buttonForward.setText(Constant.UI.BUTTON_PAUSE);
-                logger.forward();
+                gameLogger.forward();
             } else {
                 buttonForward.setText(Constant.UI.BUTTON_FORWARD);
-                logger.pause();
+                gameLogger.pause();
             }
         });
 
@@ -77,6 +87,7 @@ public class ReplayController {
         buttonStop.setOnAction(event -> App.showMenu());
 
         hBox.getChildren().addAll(buttonFirst, buttonPrevious, buttonBackward, buttonStop, buttonForward, buttonNext, buttonLast);
+        hBox.setPrefHeight(Game.GAME_TILE_SIZE);
 
         return hBox;
     }

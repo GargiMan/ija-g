@@ -1,3 +1,8 @@
+/**
+ * @file App.java
+ * @brief Main class of the application
+ * @author Marek Gergel (xgerge01)
+ */
 package ija.pacman;
 
 import ija.pacman.controls.AppController;
@@ -22,6 +27,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
+/**
+ * JavaFX App
+ */
 public class App extends Application {
 
     private static Document pom;
@@ -32,26 +40,50 @@ public class App extends Application {
     private static File[] logs;
     private static File selectedLog;
 
+    /**
+     * Get game object
+     * @return game object
+     */
     public static Game getGame() {
         return game;
     }
 
+    /**
+     * Get stage object
+     * @return stage object
+     */
     public static Stage getStage() {
         return stage;
     }
 
+    /**
+     * Set map from map list
+     * @param mapFilename map filename
+     */
     public static void setSelectedMap(String mapFilename) {
         selectedMap = Arrays.stream(maps).filter(file -> file.getName().equals(mapFilename+".txt")).findFirst().orElseThrow();
     }
 
+    /**
+     * Get selected map
+     * @return selected map
+     */
     public static File getSelectedMap() {
         return selectedMap;
     }
 
+    /**
+     * Set log from log list
+     * @param logFilename log filename
+     */
     public static void setSelectedLog(String logFilename) {
         selectedLog = Arrays.stream(logs).filter(file -> file.getName().equals(logFilename+".log")).findFirst().orElseThrow();
     }
 
+    /**
+     * Get selected log
+     * @return selected log
+     */
     public static File getSelectedLog() {
         return selectedLog;
     }
@@ -64,10 +96,17 @@ public class App extends Application {
         showMenu();
     }
 
+    /**
+     * Main method
+     * @param args ignored arguments
+     */
     public static void main(String[] args) {
         launch();
     }
 
+    /**
+     * Show menu
+     */
     public static void showMenu() {
         // load files
         String filePath = System.getProperty("user.dir") + File.separator + "data";
@@ -135,10 +174,10 @@ public class App extends Application {
         Scene scene = new Scene(tabPane, 320, 320);
         tabPane.requestFocus();
 
-        App.stage.setTitle(pom.getElementsByTagName("name").item(0).getTextContent());
-        App.stage.show();
-        App.stage.setScene(scene);
-        App.stage.centerOnScreen();
+        stage.setTitle(pom.getElementsByTagName("name").item(0).getTextContent());
+        stage.show();
+        stage.setScene(scene);
+        stage.centerOnScreen();
 
         // select last played or first map
         if (game != null) {
@@ -155,11 +194,19 @@ public class App extends Application {
         }
     }
 
+    /**
+     * Start game
+     * @param map map file
+     */
     public static void startGame(File map) {
         game = new Game(map);
         game.start();
     }
 
+    /**
+     * Replay game
+     * @param log log file
+     */
     public static void replayGame(File log) {
         game = new Game(log);
         game.replay();

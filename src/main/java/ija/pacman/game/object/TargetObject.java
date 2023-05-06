@@ -1,3 +1,8 @@
+/**
+ * @file TargetObject.java
+ * @brief Target object implementation of MazeObject interface
+ * @author Marek Gergel (xgerge01)
+ */
 package ija.pacman.game.object;
 
 import ija.pacman.App;
@@ -13,13 +18,18 @@ public class TargetObject implements MazeObject {
     private final Field field;
     private final List<KeyObject> requiredKeys;
 
+    /**
+     * Constructor of TargetObject
+     * @param field field of object
+     * @param requiredKeys list of required keys
+     */
     public TargetObject(Field field, List<KeyObject> requiredKeys) {
         this.field = field;
         this.requiredKeys = requiredKeys;
     }
 
     @Override
-    public Field getField() {
+    public Field field() {
         return field;
     }
 

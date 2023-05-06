@@ -1,7 +1,12 @@
+/**
+ * @file GameController.java
+ * @brief Controller for the game scene of the application
+ * @author Marek Gergel (xgerge01)
+ */
 package ija.pacman.controls;
 
 import ija.pacman.App;
-import ija.pacman.log.Logger;
+import ija.pacman.log.GameLogger;
 import ija.pacman.game.Direction;
 import ija.pacman.game.Maze;
 import ija.pacman.game.object.GhostObject;
@@ -13,9 +18,13 @@ import java.util.Random;
 
 public class GameController {
 
-    private final Logger logger = App.getGame().getLogger();
+    private final GameLogger gameLogger = App.getGame().getLogger();
     private final Maze maze = App.getGame().getMaze();
 
+    /**
+     * Handles key released event
+     * @param e key event
+     */
     public void keyReleased(KeyEvent e) {
         switch (e.getCode()) {
             case LEFT -> {
@@ -34,10 +43,16 @@ public class GameController {
                 return;
             }
         }
-        maze.getGhosts().forEach(this::moveGhost);
+        if (!App.getGame().isFinished()) {
+            maze.getGhosts().forEach(this::moveGhost);
+        }
         logPositions();
     }
 
+    /**
+     * Moves ghost in random direction
+     * @param ghostObject ghost to move
+     */
     private void moveGhost(GhostObject ghostObject) {
         if (!ghostObject.canMove(Direction.D) && !ghostObject.canMove(Direction.U) && !ghostObject.canMove(Direction.L) && !ghostObject.canMove(Direction.R)) {
             return;
@@ -52,19 +67,22 @@ public class GameController {
         ghostObject.move(direction);
     }
 
+    /**
+     * Logs current positions of all objects
+     */
     public void logPositions() {
-        int[] position = maze.getPacman().getField().getCoordinates();
-        logger.log("S-"+position[0]+":"+position[1]+"\t");
+        int[] position = maze.getPacman().field().getCoordinates();
+        gameLogger.log("S-"+position[0]+":"+position[1]+"\t");
         for (GhostObject ghost : maze.getGhosts()) {
-            position = ghost.getField().getCoordinates();
-            logger.log("G-" + position[0] + ":" + position[1] + "\t");
+            position = ghost.field().getCoordinates();
+            gameLogger.log("G-" + position[0] + ":" + position[1] + "\t");
         }
         HashSet<KeyObject> set = new HashSet<>(maze.getKeys());
         maze.getPacman().showKeys().forEach(set::remove);
         for (KeyObject key : set) {
-            position = key.getField().getCoordinates();
-            logger.log("K-" + position[0] + ":" + position[1] + "\t");
+            position = key.field().getCoordinates();
+            gameLogger.log("K-" + position[0] + ":" + position[1] + "\t");
         }
-        logger.log("\n");
+        gameLogger.log("\n");
     }
 }

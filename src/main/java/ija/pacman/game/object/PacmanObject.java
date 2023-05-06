@@ -1,3 +1,8 @@
+/**
+ * @file PacmanObject.java
+ * @brief Pacman object implementation of MazeObject interface
+ * @author Marek Gergel (xgerge01)
+ */
 package ija.pacman.game.object;
 
 import ija.pacman.App;
@@ -15,12 +20,16 @@ public class PacmanObject implements MazeObject {
     private Field field;
     private int moves = 0;
 
+    /**
+     * Constructor of PacmanObject
+     * @param field field of object
+     */
     public PacmanObject(Field field) {
         this.field = field;
     }
 
     @Override
-    public Field getField() {
+    public Field field() {
         return field;
     }
 
@@ -59,10 +68,14 @@ public class PacmanObject implements MazeObject {
         return true;
     }
 
+    @Override
     public int getLives() {
         return lives;
     }
 
+    /**
+     * Hit pacman and decrease lives
+     */
     public void hit() {
         lives--;
         if (lives <= 0) {
@@ -72,14 +85,26 @@ public class PacmanObject implements MazeObject {
         }
     }
 
+    /**
+     * Collect key
+     * @param key key to collect
+     */
     public void collectKey(KeyObject key) {
         keys.add(key);
     }
 
+    /**
+     * Return last collected key
+     * @return key
+     */
     public KeyObject returnKey() {
         return keys.remove(keys.size() - 1);
     }
 
+    /**
+     * Show all keys collected by pacman
+     * @return list of keys
+     */
     public List<KeyObject> showKeys() {
         return keys;
     }
@@ -100,5 +125,12 @@ public class PacmanObject implements MazeObject {
     @Override
     public String getInfo() {
         return "Pacman\nLives: " + lives + "\nCollected keys: " + keys.size() + "\nMoves: " + moves + "\n";
+    }
+
+    /**
+     * Heal pacman by one life, for replay purposes
+     */
+    public void heal() {
+        lives++;
     }
 }

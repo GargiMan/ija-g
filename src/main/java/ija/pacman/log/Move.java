@@ -1,3 +1,8 @@
+/**
+ * @file Move.java
+ * @brief Class for storing moves from log and accessing them easily for replay
+ * @author Marek Gergel (xgerge01)
+ */
 package ija.pacman.log;
 
 import ija.pacman.game.object.MazeObject;

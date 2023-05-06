@@ -1,3 +1,8 @@
+/**
+ * @file WallField.java
+ * @brief Wall field implementation of Field interface
+ * @author Marek Gergel (xgerge01)
+ */
 package ija.pacman.game.field;
 
 import ija.pacman.game.Direction;
@@ -10,6 +15,11 @@ public class WallField implements Field {
     private final int col;
     private Maze maze;
 
+    /**
+     * Constructor of WallField
+     * @param row row of field
+     * @param col column of field
+     */
     public WallField(int row, int col) {
         this.row = row;
         this.col = col;
@@ -58,8 +68,8 @@ public class WallField implements Field {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof WallField) {
-            return ((WallField) obj).row == this.row && ((WallField) obj).col == this.col;
+        if (obj instanceof WallField wallField) {
+            return wallField.row == this.row && wallField.col == this.col;
         }
         return false;
     }

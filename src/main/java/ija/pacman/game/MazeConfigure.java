@@ -1,3 +1,8 @@
+/**
+ * @file MazeConfigure.java
+ * @brief Class for loading maze from file and creating maze from loaded data
+ * @author Marek Gergel (xgerge01)
+ */
 package ija.pacman.game;
 
 import ija.pacman.game.field.Field;

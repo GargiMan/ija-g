@@ -1,3 +1,8 @@
+/**
+ * @file FieldView.java
+ * @brief Class for displaying field in UI and updating it when model changes (Observer pattern)
+ * @author Marek Gergel (xgerge01)
+ */
 package ija.pacman.view;
 
 import ija.pacman.App;
@@ -103,7 +108,7 @@ public class FieldView extends Pane implements MazeObject {
     }
 
     @Override
-    public Field getField() {
+    public Field field() {
         return this.model;
     }
 

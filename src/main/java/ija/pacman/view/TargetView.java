@@ -1,3 +1,8 @@
+/**
+ * @file TargetView.java
+ * @brief Class for painting target in UI
+ * @author Marek Gergel (xgerge01)
+ */
 package ija.pacman.view;
 
 import ija.pacman.game.object.MazeObject;
@@ -18,7 +23,7 @@ public class TargetView implements NodeView {
 
     public void paintNode(GraphicsContext g) {
         Bounds bounds = this.parent.getLayoutBounds();
-        File file = new File(System.getProperty("user.dir") + File.separator + "data" + File.separator + "icons" + File.separator + "target.png");
+        File file = new File(System.getProperty("user.dir") + File.separator + "lib" + File.separator + "icons" + File.separator + "target.png");
         g.drawImage(new Image(file.toURI().toString()), 0, 0, bounds.getWidth(), bounds.getHeight());
     }
 }
