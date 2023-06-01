@@ -114,7 +114,8 @@ public class Game {
 
         // setup controls
         GameController gameController = new GameController();
-        layout.setOnKeyReleased(gameController::keyReleased);
+        layout.setOnKeyReleased(gameController::movePacman);
+        layout.setOnMouseClicked(gameController::movePacmanToField);
 
         // log start position
         gameController.logPositions();
