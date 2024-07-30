@@ -92,7 +92,7 @@ public class GameController {
     public void movePacmanToField(MouseEvent mouseEvent) {
         if (mouseEvent.getTarget().getClass() != Canvas.class) return;
         PathField fromField = (PathField) maze.getPacman().field();
-        PathField toField = (PathField)((FieldView)(((Canvas) mouseEvent.getTarget()).getParent())).field();
+        if (!(((FieldView) (((Canvas) mouseEvent.getTarget()).getParent())).field() instanceof PathField toField)) return;
 
         AStarAlgorithm astar = new AStarAlgorithm(maze);
         List<Cell> path = astar.findOptimalPath(fromField.getCoordinates()[0], fromField.getCoordinates()[1], toField.getCoordinates()[0], toField.getCoordinates()[1]);
