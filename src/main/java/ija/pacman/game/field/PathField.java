@@ -32,8 +32,13 @@ public class PathField implements Field {
     }
 
     @Override
-    public int[] getCoordinates() {
-        return new int[]{row, col};
+    public int getRow() {
+        return row;
+    }
+
+    @Override
+    public int getCol() {
+        return col;
     }
 
     @Override

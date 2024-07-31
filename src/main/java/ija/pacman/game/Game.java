@@ -91,9 +91,9 @@ public class Game {
         return finished;
     }
 
-    public void stop(boolean finished) {
-        this.finished = finished;
-        String message = "Game"+(App.getSelectedMap() != null ? " ("+App.getSelectedMap().getName().replaceAll("[.][^.]*$", "")+")" : "") + " succefully finished: "+finished;
+    public void stop(boolean win) {
+        this.finished = true;
+        String message = "Game " + (App.getSelectedMap() != null ? "(" + App.getSelectedMap().getName().replaceAll("[.][^.]*$", "") + ")" : "") + " finished: "+(win?"WIN":"LOSE");
         System.getLogger(Game.class.getName()).log(System.Logger.Level.INFO, message);
         if (App.getStage() != null) App.showMenu();
     }
@@ -115,7 +115,7 @@ public class Game {
         // setup controls
         GameController gameController = new GameController();
         layout.setOnKeyReleased(gameController::movePacman);
-        layout.setOnMouseClicked(gameController::movePacmanToField);
+        layout.setOnMouseClicked(gameController::movePacman);
 
         // log start position
         gameController.logPositions();

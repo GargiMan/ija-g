@@ -16,7 +16,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -115,6 +117,7 @@ public class App extends Application {
 
         // tab pane and controller
         TabPane tabPane = new TabPane();
+        tabPane.setBackground(new Background(new BackgroundFill(new Color(0.5, 0.5, 0.5, 0.5), CornerRadii.EMPTY, Insets.EMPTY)));
         AppController appController = new AppController();
 
         // tab play
@@ -140,6 +143,7 @@ public class App extends Application {
         ListView<String> listViewPlay = new ListView<>();
         listViewPlay.getItems().addAll(Arrays.stream(maps).map(File::getName).filter(s -> s.contains(".txt")).map(s -> s.replaceAll("[.][^.]*$","")).toList());
         listViewPlay.getSelectionModel().selectedItemProperty().addListener(appController::onMapSelection);
+        listViewPlay.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(5.0), new BorderWidths(2.0))));
         vBoxPlay.getChildren().add(listViewPlay);
 
         // tab replay
@@ -165,6 +169,7 @@ public class App extends Application {
         ListView<String> listViewReplay = new ListView<>();
         listViewReplay.getItems().addAll(Arrays.stream(logs).map(File::getName).filter(s -> s.contains(".log")).map(s -> s.replace(".log","")).toList());
         listViewReplay.getSelectionModel().selectedItemProperty().addListener(appController::onLogSelection);
+        listViewReplay.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(5.0), new BorderWidths(2.0))));
         if (listViewReplay.getItems().isEmpty()) {
             tabReplay.setDisable(true);
         }
@@ -175,6 +180,7 @@ public class App extends Application {
         tabPane.requestFocus();
 
         stage.setTitle(pom.getElementsByTagName("name").item(0).getTextContent());
+        stage.getIcons().add(new Image("file:lib/icons/pacman.png"));
         stage.show();
         stage.setScene(scene);
         stage.centerOnScreen();

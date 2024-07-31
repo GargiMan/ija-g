@@ -6,27 +6,19 @@
 package ija.pacman.log;
 
 import ija.pacman.App;
-import ija.pacman.game.Direction;
 import ija.pacman.game.object.MazeObject;
-import ija.pacman.game.object.PacmanObject;
-import ija.pacman.others.Constant;
-import javafx.application.Platform;
-import javafx.scene.control.ButtonBase;
-import javafx.scene.layout.Pane;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Timer;
+import java.util.NoSuchElementException;
 
 public class GameLogger {
 
-    private static final double REPLAY_SPEED = 2.0;
     private final File file;
-    private List<Move> currentMoves = null;
+
     private final List<List<Move>> moves = new ArrayList<>();
-    private Timer timer;
+    private GameMovesIterator<List<Move>> iterator = null;
 
     public GameLogger(String filename) {
         String filePath = System.getProperty("user.dir") + File.separator + "data" + File.separator + "logs" + File.separator;
@@ -89,7 +81,7 @@ public class GameLogger {
                     if (moves.isEmpty()) {
                         previousMove = null;
                     } else if (mazeObject.isKey()) {
-                        previousMove = moves.get(moves.size()-1).stream().filter(m -> Arrays.equals(m.getCoordinates(), new int[]{row, col})).findFirst().orElse(null);
+                        previousMove = moves.get(moves.size()-1).stream().filter(m -> m.getRow() == row && m.getCol() == col).findFirst().orElse(null);
                     } else {
                         previousMove = moves.get(moves.size()-1).get(ghostIndex);
                     }
@@ -101,106 +93,50 @@ public class GameLogger {
                 }
                 moves.add(lineMoves);
             }
-            currentMoves = moves.get(0);
+            iterator = new GameMovesIterator<>(moves);
         } catch (Exception e) {
             System.getLogger(GameLogger.class.getName()).log(System.Logger.Level.ERROR, "Failed to load game log: "+file.getName()+"\n"+e.getMessage());
         }
     }
 
-    public void first() {
-        while (moves.indexOf(currentMoves) != 0) {
-            previous();
-        }
+    public GameMovesIterator<List<Move>> getMovesIterator() {
+        return iterator;
     }
 
-    public void previous() {
-        if (moves.indexOf(currentMoves) == 0) {
-            return;
+    public static class GameMovesIterator<E> {
+        private final List<E> list;
+        private int currentIndex = 0;
+
+        public GameMovesIterator(List<E> list) {
+            this.list = list;
         }
 
-        for (Move move : currentMoves) {
-            if (move.getObject().isKey()) {
-                continue;
+        public boolean hasNext() {
+            return currentIndex < list.size() - 1;
+        }
+
+        public boolean hasPrevious() {
+            return currentIndex > 0;
+        }
+
+        public E current() {
+            return list.get(currentIndex);
+        }
+
+        public E previous() {
+            if (!hasPrevious()) {
+                throw new NoSuchElementException();
             }
-            int[] fromCoords = move.getCoordinates();
-            int[] toCoords = move.previous().getCoordinates();
-            move.getObject().undoMove(Direction.fromPositions(fromCoords[0], fromCoords[1], toCoords[0], toCoords[1]));
-
-            //heal pacman if he died
-            if (move.getObject() instanceof PacmanObject pacman && pacman.getLives() <= 0) {
-                pacman.heal();
-            }
+            currentIndex--;
+            return list.get(currentIndex);
         }
 
-        //return key if it was picked up
-        List<Move> previousMoves = moves.get(moves.indexOf(currentMoves)-1);
-        if (previousMoves.stream().anyMatch(m -> m.next() == null)) {
-            App.getGame().getMaze().getPacman().returnKey().place();
-        }
-
-        currentMoves = previousMoves;
-    }
-
-    public void backward() {
-        timer = new Timer();
-        timer.scheduleAtFixedRate(new java.util.TimerTask() {
-            @Override
-            public void run() {
-                Platform.runLater(() -> {
-                    if (moves.indexOf(currentMoves) == 0) {
-                        pause();
-                        ButtonBase button = (ButtonBase)((Pane)App.getStage().getScene().getRoot().getChildrenUnmodifiable().get(1)).getChildrenUnmodifiable()
-                                .stream().filter(n -> n instanceof ButtonBase nbutton && nbutton.getText().equals(Constant.UI.BUTTON_PAUSE)).findFirst().orElseThrow();
-                        button.setText(Constant.UI.BUTTON_BACKWARD);
-                        return;
-                    }
-                    previous();
-                });
+        public E next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
             }
-        }, 0, (long)(1/ REPLAY_SPEED * 1000));
-    }
-
-    public void pause() {
-        timer.cancel();
-    }
-
-    public void forward() {
-        timer = new Timer();
-        timer.scheduleAtFixedRate(new java.util.TimerTask() {
-            @Override
-            public void run() {
-                Platform.runLater(() -> {
-                    if (moves.indexOf(currentMoves) == moves.size()-1) {
-                        pause();
-                        ButtonBase button = (ButtonBase)((Pane)App.getStage().getScene().getRoot().getChildrenUnmodifiable().get(1)).getChildrenUnmodifiable()
-                                .stream().filter(n -> n instanceof ButtonBase nbutton && nbutton.getText().equals(Constant.UI.BUTTON_PAUSE)).findFirst().orElseThrow();
-                        button.setText(Constant.UI.BUTTON_FORWARD);
-                        return;
-                    }
-                    next();
-                });
-            }
-        }, 0, (long)(1/ REPLAY_SPEED * 1000));
-    }
-
-    public void next() {
-        if (moves.indexOf(currentMoves) == moves.size()-1) {
-            return;
-        }
-        for (Move move : currentMoves) {
-            if (move.getObject().isKey()) {
-                continue;
-            }
-            int[] fromCoords = move.getCoordinates();
-            int[] toCoords = move.next().getCoordinates();
-            move.getObject().move(Direction.fromPositions(fromCoords[0], fromCoords[1], toCoords[0], toCoords[1]));
-        }
-        currentMoves = moves.get(moves.indexOf(currentMoves)+1);
-    }
-
-    public void last() {
-        while (moves.indexOf(currentMoves) != moves.size()-1) {
-            next();
+            currentIndex++;
+            return list.get(currentIndex);
         }
     }
 }

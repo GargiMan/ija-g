@@ -24,6 +24,15 @@ public class Move {
     public int[] getCoordinates() {
         return new int[] {row, col};
     }
+
+    public int getRow() {
+        return row;
+    }
+
+    public int getCol() {
+        return col;
+    }
+
     public void setNext(Move next) {
         this.nextMove = next;
     }

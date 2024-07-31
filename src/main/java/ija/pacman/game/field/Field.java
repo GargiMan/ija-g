@@ -14,10 +14,15 @@ import ija.pacman.game.object.MazeObject;
  */
 public interface Field {
     /**
-     * Returns coordinates of field
-     * @return coordinates of field
+     * Returns row of field
+     * @return row of field
      */
-    int[] getCoordinates();
+    int getRow();
+    /**
+     * Returns column of field
+     * @return column of field
+     */
+    int getCol();
     /**
      * Sets maze for field
      * @param maze maze to set

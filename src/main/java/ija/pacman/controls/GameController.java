@@ -14,6 +14,7 @@ import ija.pacman.game.object.GhostObject;
 import ija.pacman.game.object.KeyObject;
 import ija.pacman.log.GameLogger;
 import ija.pacman.view.FieldView;
+import javafx.application.Platform;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -26,11 +27,18 @@ public class GameController {
     private final GameLogger gameLogger = App.getGame().getLogger();
     private final Maze maze = App.getGame().getMaze();
 
+    public static final KeyEvent LEFT = new KeyEvent(null, null, null, null, null, KeyCode.LEFT, false, false, false, false);
+    public static final KeyEvent UP = new KeyEvent(null, null, null, null, null, KeyCode.UP, false, false, false, false);
+    public static final KeyEvent RIGHT = new KeyEvent(null, null, null, null, null, KeyCode.RIGHT, false, false, false, false);
+    public static final KeyEvent DOWN = new KeyEvent(null, null, null, null, null, KeyCode.DOWN, false, false, false, false);
+
     /**
      * Handles key released event
      * @param e key event
      */
     public void movePacman(KeyEvent e) {
+        if (App.getGame().isFinished()) return;
+
         switch (e.getCode()) {
             case LEFT -> {
                 if (!maze.getPacman().move(Direction.L)) return;
@@ -74,65 +82,78 @@ public class GameController {
      * Logs current positions of all objects
      */
     public void logPositions() {
-        int[] position = maze.getPacman().field().getCoordinates();
-        gameLogger.log("S-"+position[0]+":"+position[1]+"\t");
+        gameLogger.log("S-" + maze.getPacman().field().getRow() + ":" + maze.getPacman().field().getCol() + "\t");
         for (GhostObject ghost : maze.getGhosts()) {
-            position = ghost.field().getCoordinates();
-            gameLogger.log("G-" + position[0] + ":" + position[1] + "\t");
+            gameLogger.log("G-" + ghost.field().getRow() + ":" + ghost.field().getCol() + "\t");
         }
-        HashSet<KeyObject> set = new HashSet<>(maze.getKeys());
-        maze.getPacman().showKeys().forEach(set::remove);
-        for (KeyObject key : set) {
-            position = key.field().getCoordinates();
-            gameLogger.log("K-" + position[0] + ":" + position[1] + "\t");
+        HashSet<KeyObject> keysNotTaken = new HashSet<>(maze.getKeys());
+        maze.getPacman().showKeys().forEach(keysNotTaken::remove);
+        for (KeyObject key : keysNotTaken) {
+            gameLogger.log("K-" + key.field().getRow() + ":" + key.field().getCol() + "\t");
         }
         gameLogger.log("\n");
     }
 
-    public void movePacmanToField(MouseEvent mouseEvent) {
-        if (mouseEvent.getTarget().getClass() != Canvas.class) return;
+    /**
+     * Handles mouse click event
+     * @param e mouse event
+     */
+    public void movePacman(MouseEvent e) {
+        if (App.getGame().isFinished()) return;
+
+        if (e.getTarget().getClass() != Canvas.class) return;
         PathField fromField = (PathField) maze.getPacman().field();
-        if (!(((FieldView) (((Canvas) mouseEvent.getTarget()).getParent())).field() instanceof PathField toField)) return;
+        if (!(((FieldView) (((Canvas) e.getTarget()).getParent())).field() instanceof PathField toField)) return;
 
         AStarAlgorithm astar = new AStarAlgorithm(maze);
-        List<Cell> path = astar.findOptimalPath(fromField.getCoordinates()[0], fromField.getCoordinates()[1], toField.getCoordinates()[0], toField.getCoordinates()[1]);
+        List<AStarAlgorithm.Cell> path = astar.findOptimalPath(fromField.getRow(), fromField.getCol(), toField.getRow(), toField.getCol());
 
         if (path != null) {
-            for (int i = 0; i < path.size() - 1; i++) {
-                Direction direction = Direction.fromPositions(path.get(i).row, path.get(i).col, path.get(i+1).row, path.get(i+1).col);
-                switch (direction) {
-                    case L -> movePacman(new KeyEvent(null, null, null, null, null, KeyCode.LEFT, false, false, false, false));
-                    case U -> movePacman(new KeyEvent(null, null, null, null, null, KeyCode.UP, false, false, false, false));
-                    case R -> movePacman(new KeyEvent(null, null, null, null, null, KeyCode.RIGHT, false, false, false, false));
-                    case D -> movePacman(new KeyEvent(null, null, null, null, null, KeyCode.DOWN, false, false, false, false));
+            App.getStage().getScene().getRoot().setOnMouseClicked(null);
+            App.getStage().getScene().getRoot().setOnKeyPressed(null);
+            new Thread(() -> {
+                for (int i = 0; i < path.size() - 1; i++) {
+                    Direction direction = Direction.fromPositions(path.get(i).row, path.get(i).col, path.get(i + 1).row, path.get(i + 1).col);
+                    Platform.runLater(() -> {
+                        switch (direction) {
+                            case L -> movePacman(LEFT);
+                            case U -> movePacman(UP);
+                            case R -> movePacman(RIGHT);
+                            case D -> movePacman(DOWN);
+                        }
+                    });
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException ignored) {
+                    }
                 }
+                App.getStage().getScene().getRoot().setOnMouseClicked(this::movePacman);
+                App.getStage().getScene().getRoot().setOnKeyPressed(this::movePacman);
+            }).start();
+        }
+    }
+
+    /**
+     * @param maze Grid representation of the game field
+     */
+    private record AStarAlgorithm(Maze maze) {
+
+        static class Cell {
+            int row;
+            int col;
+            int f;
+            int g;
+            int h;
+            Cell parent;
+
+            public Cell(int row, int col) {
+                this.row = row;
+                this.col = col;
+                this.f = 0;
+                this.g = 0;
+                this.h = 0;
+                this.parent = null;
             }
-        }
-    }
-
-    class Cell {
-        int row;
-        int col;
-        int f;
-        int g;
-        int h;
-        Cell parent;
-
-        public Cell(int row, int col) {
-            this.row = row;
-            this.col = col;
-            this.f = 0;
-            this.g = 0;
-            this.h = 0;
-            this.parent = null;
-        }
-    }
-
-    private class AStarAlgorithm {
-        private Maze maze; // Grid representation of the game field
-
-        public AStarAlgorithm(Maze maze) {
-            this.maze = maze;
         }
 
         // Heuristic function: Manhattan distance
@@ -140,15 +161,13 @@ public class GameController {
             return Math.abs(row - targetRow) + Math.abs(col - targetCol);
         }
 
-        // Check if a cell is valid (within grid bounds and not a wall)
         private boolean isValidCell(int row, int col) {
             Field field = maze.getField(row, col);
             return field != null && field.canMove();
         }
 
-        // Check if the given cell is the target cell
-        private boolean isTargetCell(int row, int col, int targetRow, int targetCol) {
-            return row == targetRow && col == targetCol;
+        private boolean isTargetCell(int row, int col, Cell target) {
+            return row == target.row && col == target.col;
         }
 
         // Get the optimal path from the start cell to the target cell
@@ -172,7 +191,7 @@ public class GameController {
                 closedList[currentCell.row][currentCell.col] = true;
 
                 // Check if the current cell is the target cell
-                if (isTargetCell(currentCell.row, currentCell.col, targetRow, targetCol)) {
+                if (isTargetCell(currentCell.row, currentCell.col, targetCell)) {
                     // Reconstruct the path
                     List<Cell> path = new ArrayList<>();
                     Cell cell = currentCell;
@@ -211,6 +230,4 @@ public class GameController {
             return null;
         }
     }
-
-
 }
