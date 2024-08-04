@@ -54,7 +54,7 @@ public record KeyObject(Field field) implements MazeObject {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        List<MazeObject> mazeObjects = (List<MazeObject>) evt.getNewValue();
+        List<MazeObject> mazeObjects = convertToMazeObjects(evt.getNewValue());
 
         //collect key with pacman on field
         PacmanObject pacman = (PacmanObject) mazeObjects.stream().filter(MazeObject::isPacman).findFirst().orElse(null);

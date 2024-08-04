@@ -111,7 +111,7 @@ public class PacmanObject implements MazeObject {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        List<MazeObject> mazeObjects = (List<MazeObject>) evt.getNewValue();
+        List<MazeObject> mazeObjects = convertToMazeObjects(evt.getNewValue());
 
         // this object has changed
         if (mazeObjects.get(mazeObjects.size() - 1).toString().equals(this.toString())) return;

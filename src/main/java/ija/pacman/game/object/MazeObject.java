@@ -9,6 +9,8 @@ import ija.pacman.game.Direction;
 import ija.pacman.game.field.Field;
 
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public interface MazeObject extends PropertyChangeListener {
     /**
@@ -82,4 +84,22 @@ public interface MazeObject extends PropertyChangeListener {
      * @return info status
      */
     String getInfo();
+
+    /**
+     * Convert Object to List<MazeObject> for property change.
+     * @param o object
+     * @return list of collected MazeObjects
+     */
+    default List<MazeObject> convertToMazeObjects(Object o) {
+        //safe cast of Object to List<MazeObject>
+        List<MazeObject> mazeObjects = new ArrayList<>();
+        if (o instanceof List<?> list) {
+            for (Object oInList : list) {
+                if (oInList instanceof MazeObject mazeObject) {
+                    mazeObjects.add(mazeObject);
+                }
+            }
+        }
+        return mazeObjects;
+    }
 }

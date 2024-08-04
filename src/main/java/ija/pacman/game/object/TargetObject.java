@@ -55,7 +55,7 @@ public class TargetObject implements MazeObject {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        List<MazeObject> mazeObjects = (List<MazeObject>) evt.getNewValue();
+        List<MazeObject> mazeObjects = convertToMazeObjects(evt.getNewValue());
 
         PacmanObject pacman = (PacmanObject) mazeObjects.stream().filter(MazeObject::isPacman).findFirst().orElse(null);
         if (pacman != null && new HashSet<>(pacman.showKeys()).containsAll(requiredKeys)) {
