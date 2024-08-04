@@ -21,10 +21,6 @@ public class Move {
         this.col = col;
     }
 
-    public int[] getCoordinates() {
-        return new int[] {row, col};
-    }
-
     public int getRow() {
         return row;
     }

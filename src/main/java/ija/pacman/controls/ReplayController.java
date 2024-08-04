@@ -104,7 +104,7 @@ public class ReplayController {
         });
 
         // stop
-        buttonStop.setOnAction(event -> App.showMenu());
+        buttonStop.setOnAction(event -> {LocalTimer.cancel(); App.showMenu();});
 
         hBox.getChildren().addAll(buttonFirst, buttonPrevious, buttonBackward, buttonStop, buttonForward, buttonNext, buttonLast);
         hBox.setPrefHeight(Game.GAME_TILE_SIZE);

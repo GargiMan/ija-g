@@ -46,7 +46,7 @@ public class GameLogger {
         }
     }
 
-    public void loadGame() {
+    public boolean loadGame() {
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             //skip maze
@@ -59,32 +59,28 @@ public class GameLogger {
             while ((line = br.readLine()) != null) {
                 List<Move> lineMoves = new ArrayList<>();
                 String[] lineMoveS = line.split("\t");
+
                 int ghostIndex = 0;
                 int keyIndex = 0;
+
                 for (String moveS : lineMoveS) {
                     int row = Integer.parseInt(moveS.split("-")[1].split(":")[0]);
                     int col = Integer.parseInt(moveS.split("-")[1].split(":")[1]);
+
                     MazeObject mazeObject = switch (moveS.split("-")[0]) {
                         case "S" -> App.getGame().getMaze().getPacman();
-                        case "G" -> App.getGame().getMaze().getGhosts().get(ghostIndex);
-                        case "K" -> App.getGame().getMaze().getKeys().get(keyIndex);
-                        default -> null;
+                        case "G" -> App.getGame().getMaze().getGhosts().get(ghostIndex++);
+                        case "K" -> App.getGame().getMaze().getKeys().get(keyIndex++);
+                        default -> throw new RuntimeException("Invalid log maze object");
                     };
-                    if (mazeObject == null) {
-                        throw new RuntimeException("Invalid log maze object");
-                    } else if (mazeObject.isGhost()) {
-                        ghostIndex++;
-                    } else if (mazeObject.isKey()) {
-                        keyIndex++;
-                    }
+
                     Move previousMove;
                     if (moves.isEmpty()) {
                         previousMove = null;
-                    } else if (mazeObject.isKey()) {
-                        previousMove = moves.get(moves.size()-1).stream().filter(m -> m.getRow() == row && m.getCol() == col).findFirst().orElse(null);
                     } else {
-                        previousMove = moves.get(moves.size()-1).get(ghostIndex);
+                        previousMove = moves.get(moves.size()-1).stream().filter(m -> m.getObject() == mazeObject).findFirst().orElse(null);
                     }
+
                     Move currentMove = new Move(mazeObject, previousMove, row, col);
                     if (previousMove != null) {
                         previousMove.setNext(currentMove);
@@ -96,7 +92,9 @@ public class GameLogger {
             iterator = new GameMovesIterator<>(moves);
         } catch (Exception e) {
             System.getLogger(GameLogger.class.getName()).log(System.Logger.Level.ERROR, "Failed to load game log: "+file.getName()+"\n"+e.getMessage());
+            return false;
         }
+        return true;
     }
 
     public GameMovesIterator<List<Move>> getMovesIterator() {

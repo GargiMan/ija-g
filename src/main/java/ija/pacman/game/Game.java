@@ -78,9 +78,9 @@ public class Game {
         replay = true;
 
         gameLogger = new GameLogger(file);
-        gameLogger.loadGame();
-
-        initializeInterface(true);
+        if (gameLogger.loadGame()) {
+            initializeInterface(true);
+        }
     }
 
     public boolean isReplay() {
